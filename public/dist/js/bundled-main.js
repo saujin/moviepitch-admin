@@ -34557,12 +34557,6 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
   // Main Nav
   $stateProvider.state('index', {
     url: "/",
-    templateUrl: "views/home.html",
-    data: {
-      requireLogin: false
-    }
-  }).state('login', {
-    url: "/login",
     templateUrl: "views/login.html",
     data: {
       requireLogin: false
@@ -34608,30 +34602,6 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
     templateUrl: "views/admin/rejected-pitches.html",
     data: {
       requireLogin: true
-    }
-  }).state('faq', {
-    url: "/faq",
-    templateUrl: "views/faq.html",
-    data: {
-      requireLogin: false
-    }
-  }).state('press', {
-    url: "/press",
-    templateUrl: "views/press.html",
-    data: {
-      requireLogin: false
-    }
-  }).state('contact-us', {
-    url: "/contact-us",
-    templateUrl: "views/contact-us.html",
-    data: {
-      requireLogin: false
-    }
-  }).state('legal', {
-    url: "/legal",
-    templateUrl: "views/legal.html",
-    data: {
-      requireLogin: false
     }
   });
 }]).run(function ($rootScope, $state) {
