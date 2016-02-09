@@ -1,0 +1,22 @@
+<!doctype html>
+<html ng-app="moviePitchApp" class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Moviepitch.com</title>
+    <meta name="description" content="Pitch your idea to Hollywood and earn up to $50,000!">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/dist/css/main.css"/>
+  </head>
+  <body ng-controller="MainController" class="{{isModalShown}}">
+    <div ui-view></div>
+
+    <footer>Copyright © 2016 MoviePitch.com</footer>
+
+    <!-- Jquery and Bootstrap run without modules, everything else browserified -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="dist/js/bundled-main.js"></script>
+    <script defer src="https://checkout.stripe.com/checkout.js"></script>
+
+  </body>
+</html>

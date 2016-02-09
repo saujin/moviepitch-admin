@@ -1,0 +1,153 @@
+.header {
+  align-items: center;
+  background: #0C0D0E;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header--home {
+  background: none !important;
+  position: absolute;
+  z-index: 100;
+}
+
+.nav-logo {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.nav-logo-img {
+  max-height: 100%;
+  width: auto;
+}
+
+.menu-toggle {
+  background-color: transparent;
+  background-image: url('../img/ico-menu.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: none;
+  height: 26px;
+  width: 30px;
+}
+
+@media all and (max-width: $tabletMax){
+  .header {
+    height: 70px;
+    padding: 0 20px;
+    position: relative;
+  }
+
+  .header--home {
+    position: absolute;
+  }
+
+  .nav-logo {
+    height: 34px;
+  }
+
+  .main-nav {
+    top: 70px;
+    left: 0;
+    max-height: 0;
+    overflow: hidden;
+    position: absolute;
+    transition: all 0.35s;
+    width: 100%;
+  }
+
+  .main-nav.menu-open {
+    max-height: 250px;
+    z-index: 10000;
+  }
+
+  .main-nav-link {
+    background: $dark-grey;
+    color: $white;
+    display: block;
+    font-size: 1rem;
+    line-height: 40px;
+    padding: 0 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:hover {
+      background: $charcoal-grey;
+    }
+  }
+
+  .main-nav-link--active {
+    background: $charcoal-grey;
+  }
+}
+
+
+@media all and (min-width: $browserMin){
+  .header {
+    background: #0C0D0E;
+    left: 0;
+    padding: 30px 20px 20px 20px;
+    width: 100%;
+  }
+
+  .header--home {
+    left: 0;
+    padding: 50px 20px 0 20px;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .main-nav {
+    align-items: center;
+    display: flex;
+    flex: 1 1 auto;
+    max-width: 400px;
+  }
+
+  .nav-logo img{
+    height: 44px;
+    width: auto;
+  }
+
+  .main-nav-link {
+    color: $white;
+    flex: 1 1 auto;
+    font-size: .875rem;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .main-nav-link--active {
+    &:before {
+      border-top: solid 2px $tomato;
+      content: "";
+      display: block;
+      height: 0;
+      margin-top: -1px;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      z-index: 1;
+    }
+  }
+
+  .main-nav-link:hover {
+    text-decoration: underline;
+  }
+}
+
+@media all and (min-width: $contentMax){
+
+  .header--home {
+    left: 50%;
+    margin-left: -550px;
+    width: 1100px;
+  }
+}

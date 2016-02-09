@@ -1,0 +1,24 @@
+.pitch-box {
+  background: $background;
+  border-radius: 10px;
+  overflow: auto;
+  padding: 10px;
+
+  select, textarea {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  select {
+    width: 70%;
+  }
+
+  textarea {
+    width: 100%;
+  }
+}
+
+.validation-notice {
+  font-size: .825rem;
+  font-weight: 300;
+}

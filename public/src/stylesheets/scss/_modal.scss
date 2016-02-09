@@ -1,0 +1,225 @@
+.modal-bg {
+  bottom: 0;
+  display: flex;
+  left: 0;
+  justify-content: center;
+  position: fixed;
+  right: 0;
+  z-index: 1000;
+}
+
+.modal {
+  animation: modalzoom .2s forwards;
+  background: $white;
+  border-radius: 20px;
+  color: $purplish-grey;
+  flex: 1 1 auto;
+  font-size: 1.25rem;
+  height: 431px;
+  max-width: 820px;
+  padding-bottom: 20px;
+}
+
+.modal-title {
+  text-transform: uppercase;
+}
+
+.example-modal {
+
+  .pitch-viewer {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 20px 0;
+
+    strong {
+      display: block;
+      font-size: 1.875rem;
+      opacity: 0;
+      text-align: center;
+
+    }
+
+    .reveal-title {
+      transition: all 0.5s;
+      opacity: 1;
+    }
+
+    p {
+      max-width: 600px;
+      text-align: center;
+    }
+  }
+}
+
+ .pitch-modal {
+  .textarea-wrapper {
+    border-bottom: solid 1px $pale-grey;
+  }
+}
+
+.pitch-modal-terms {
+  padding: 20px 20px 40px 20px;
+  position: relative;
+
+  .validation-notice {
+    bottom: 15px;
+    color: $tomato;
+    left: 0;
+    font-size: .8rem;
+    left: 20px;
+    position: absolute;
+  }
+}
+
+@media all and (max-width: $tabletMax){
+  .modal-bg{
+    animation: slideIn 0.4s forwards;
+    background: $white;
+    overflow: scroll;
+    top: 0px;
+  }
+
+  .modal-close-animation {
+    animation: slideOut 0.4s forwards;
+  }
+
+  .modal {
+    margin: 60px 20px 0 20px;
+  }
+
+  .close-modal-btn {
+    background: $off-white;
+    color: $tomato;
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    left: 0;
+    line-height: 35px;
+    padding: 0 20px;
+    position: absolute;
+    text-align: left;
+    text-transform: uppercase;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+
+    &:after {
+      content: "< Back";
+      display: block;
+    }
+  }
+
+  .modal-title {
+    text-align: center;
+  }
+
+  button[type="submit"] {
+    display: block;
+    margin: 50px auto;
+  }
+
+  .pitch-modal-terms {
+    .validation-notice {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media all and (min-width: $browserMin){
+  .modal-bg {
+    animation: modalFade .2s forwards;
+    background: rgba(0,0,0,.8);
+    top: 0;
+  }
+
+  .modal {
+    margin: 160px 20px 0 20px;
+    position: relative;
+
+    .select-wrapper {
+      background: $off-white;
+      margin: 0;
+      padding: 0px;
+    }
+
+    .fancy-select {
+      padding: 20px;
+    }
+
+    .options {
+      box-shadow: 0px 2px 50px $black-20;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 20px;
+      top: 75px;
+    }
+
+    .trigger {
+      padding: 5px 24px 5px 10px;
+    }
+    .options li {
+      border: none;
+      flex: 1 1 25%;
+      font-size: 1rem;
+      line-height: 2rem;
+      padding: 0;
+    }
+
+    li.selected {
+      background: $white;;
+      color: $tomato;
+    }
+
+    button[type="submit"] {
+      bottom: -30px;
+      right: 64px;
+      position: absolute;
+      width: 230px;
+    }
+  }
+
+  .example-modal {
+    &:before {
+      background-image: url('../img/quotes-shadowed.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      content: "";
+      display: block;
+      left: 20px;
+      height: 160px;
+      margin-top: -90px;
+      position: absolute;
+      width: 160px;
+      z-index: 100;
+    }
+  }
+  .close-modal-btn {
+    background: none;
+    color: $white;
+    font-size: 3rem;
+    font-weight: 700;
+    position: fixed;
+    right: 10%;
+    top: 30px;
+
+    &:after {
+      content: "X";
+    }
+  }
+
+  .modal-title {
+    color: $white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    top: -110px;
+    width: 100%;
+  }
+}

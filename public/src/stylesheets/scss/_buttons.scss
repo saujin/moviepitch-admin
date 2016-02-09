@@ -1,0 +1,80 @@
+.btn-container {
+  align-items: center;
+  display: flex;
+}
+
+.btn-container--center {
+  justify-content: center;
+}
+
+.btn-container--padded {
+  margin: 100px 0;
+}
+
+.btn {
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  text-align: center;
+}
+
+.btn--primary {
+  background: $tomato;
+  box-shadow: 0px 0px 20px $black-20;
+  color: $white;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  padding: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.35s;
+  width: 270px;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: $dark-tomato;
+  }
+}
+
+.btn--secondary {
+  background: $tomato;
+  color: $white;
+  font-size: .875rem;
+  letter-spacing: 2px;
+  padding: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.35s;
+  width: auto;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: $dark-tomato;
+  }
+}
+
+.btn--action {
+  display: inline-block;
+  margin: 1rem auto;
+  padding: 20px 50px;
+}
+
+.btn--inactive {
+  background: $silver;
+  cursor: default;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: $silver;
+  }
+}
+
+@media all and (max-width: $tabletMax){
+  .btn-container {
+    justify-content: center;
+  }
+}
+
