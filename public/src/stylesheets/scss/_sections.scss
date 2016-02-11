@@ -136,14 +136,17 @@
 }
 
 .section-nav-link {
-  color: $dark-grey;
+  border-left: solid 1px $purplish-grey;
+  color: $purplish-grey;
   display: block;
-  font-weight: 700;
+  font-size: 1rem;
+  padding: .5rem 0 .5rem 1rem;
   text-decoration: none;
   text-transform: uppercase;
 }
 
 .section-nav-link--active {
+  border-left: solid 1px $tomato;
   color: $tomato;
 }
 
@@ -181,22 +184,15 @@
 
   .section-content--has-nav {
     display: flex;
+    margin-top: 30px;
   }
 
   .section-content-nav {
-    flex: 2 2 16.6666%;
-  }
-
-  .section-nav-link {
-    margin-bottom: .5rem;
-  }
-
-  .section-nav-link--active {
-    color: $tomato;
+    flex: 3 3 25%;
   }
 
   .section-content-content {
-    flex: 10 10 83.3334%;
-    padding-left: 50px;
+    flex: 9 9 75%;
+    padding-left: 30px;
   }
 }

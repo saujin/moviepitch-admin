@@ -7,26 +7,28 @@
 }
 
 .card-heading {
+	font-size: 1.75rem;
 	margin-top: 0px;
-	margin-bottom: 3rem;
+	margin-bottom: 2rem;
+	text-transform: uppercase;
 }
 
-.current-admin-list {
-	padding-left: 0px;
+
+
+.notification {
+	color: $tomato;
+	display: block;
+	font-size: .825rem;
+	padding: 1rem 0;
+	text-transform: uppercase;
 }
 
-.admin-user {
+.pitch-actions {
+	align-items: center;
 	display: flex;
-	margin-bottom: 1rem;
+	justify-content: flex-end;
 
-	> div {
-		flex: 1 1 auto;
-	}
-
-	> button {
-		flex: 0 0 120px;
-		font-size: 1rem;
-		width: 200px;
+	button + button {
+		margin-left: 20px;
 	}
 }
-

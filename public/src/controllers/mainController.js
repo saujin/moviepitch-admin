@@ -1,6 +1,21 @@
-moviePitchApp.controller('MainController', ['$scope', 'ModalService', '$timeout',
-  function($scope, ModalService, $timeout) {
+moviePitchApp.controller('MainController', ['$scope', 'ModalService', '$timeout', '$state',
+  function($scope, ModalService, $timeout, $state) {
     $scope.isModalShown = "modal-hidden";
+
+    $scope.$on('logged-in', function(resp){
+      console.log('working');
+      $scope.showLogout = "logout--show";
+    });
+
+    $scope.$on('logged-out', function(resp){
+      $scope.showLogout = "";
+    });
+
+    $scope.logoutUser = function(){
+      $scope.showLogout = "";
+      $scope.$broadcast('logout-user');
+      $state.go('index');
+    }
 
     function openModalTasks(){
       $('.modal-close-animation').removeClass('modal-close-animation');

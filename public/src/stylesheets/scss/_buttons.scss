@@ -55,6 +55,26 @@
   }
 }
 
+.btn--tertiary {
+  background: $white;
+  border: solid 1px $tomato;
+  color: $tomato;
+  font-size: .875rem;
+  letter-spacing: 2px;
+  padding: 9px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.35s;
+  width: auto;
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: $dark-tomato;
+    color: $dark-tomato;
+  }
+}
+
 .btn--action {
   display: inline-block;
   margin: 1rem auto;

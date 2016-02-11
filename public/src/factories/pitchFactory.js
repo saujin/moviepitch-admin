@@ -1,9 +1,9 @@
 "use strict";
 
-moviePitchApp.factory('pitchFactory', function($q, $http) {
+moviePitchApp.factory('pitchFactory', function($q, $http, $rootScope) {
   const urlBase = "https://moviepitchapi.herokuapp.com";
 
-  let factory = {
+  const factory = {
 
     acceptPitch: function(id){
       return $http({
@@ -20,6 +20,7 @@ moviePitchApp.factory('pitchFactory', function($q, $http) {
     },
 
     getPitchesByFilter: function(filterString){
+
       return $http({
         method: "GET",
         url: urlBase + "/pitch?" + filterString

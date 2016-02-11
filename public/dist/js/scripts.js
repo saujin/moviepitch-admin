@@ -276,15 +276,23 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
     if (requireLogin === true && $rootScope.curUser === null) {
       event.preventDefault();
       $rootScope.targetState = toState.name;
-      $state.go('login');
+      $state.go('index');
     }
   });
 });
 'use strict';
 
-moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFactory', '$state', 'pitchFactory', function ($scope, $rootScope, adminFactory, $state, pitchFactory) {
+moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFactory', '$state', 'pitchFactory', '$http', '$timeout', function ($scope, $rootScope, adminFactory, $state, pitchFactory, $http, $timeout) {
+
+	function clearFields() {
+		$scope.adminUsernameRegister = "";
+		$scope.adminEmailRegister = "";
+		$scope.adminPasswordRegister = "";
+		$scope.adminPasswordRegisterConfirm = "";
+	}
 
 	// Login an Admin
+	$scope.notification = "";
 	// $scope.adminEmail = "j@j.com";
 	// $scope.adminPassword = "test";
 	$scope.adminEmail = "";
@@ -292,7 +300,10 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	$scope.loginAdmin = function () {
 
 		adminFactory.loginAdmin($scope.adminEmail, $scope.adminPassword).then(function (resp) {
+			$http.defaults.headers.common.Authorization = "JWT " + resp.data.token;
 			$rootScope.curUser = resp.data.token;
+
+			$scope.$emit('logged-in', resp);
 
 			if ($rootScope.targetState === "" || $rootScope.targetState === undefined) {
 				$state.go('admin');
@@ -306,8 +317,14 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 		});
 	};
 
+	$scope.$on('logout-user', function () {
+		$scope.logoutAdmin();
+	});
+
 	// Logout an Admin
 	$scope.logoutAdmin = function () {
+		$http.defaults.headers.common.Authorization = "";
+
 		adminFactory.logoutAdmin().then(function (resp) {
 			console.log('Logging out');
 		}).catch(function (err) {
@@ -316,13 +333,13 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	};
 
 	// Register an Admin
-	$scope.adminUsernameRegister = "";
-	$scope.adminEmailRegister = "";
-	$scope.adminPasswordRegister = "";
-	$scope.adminPasswordRegisterConfirm = "";
-
+	clearFields();
 	$scope.registerAdmin = function () {
-		if ($scope.adminPasswordRegister === $scope.adminPasswordRegisterConfirm) {
+		if ($scope.adminUsernameRegister === "" || $scope.adminEmailRegister === "" || $scope.adminPasswordRegister === "" || $scope.adminPasswordRegisterConfirm === "") {
+			$scope.notification = "Please fill out all the fields to register an admin.";
+		} else if ($scope.adminPasswordRegister !== $scope.adminPasswordRegisterConfirm) {
+			$scope.notification = 'The passwords do not match.';
+		} else {
 			var data = {
 				name: $scope.adminUsernameRegister,
 				email: $scope.adminEmailRegister,
@@ -330,12 +347,16 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 			};
 
 			adminFactory.registerAdmin(data).then(function (resp) {
+				clearFields();
+				$scope.notification = "Account created.";
+				$timeout(function () {
+					$scope.notification = "";
+				}, 3000);
 				console.log(resp);
 			}).catch(function (err) {
-				console.log(err);
+				console.log(err.data.message);
+				$scope.notification = err.data.message;
 			});
-		} else {
-			console.log('passwords do not match');
 		}
 	};
 }]);
@@ -349,8 +370,23 @@ moviePitchApp.controller('CustomModalController', ['$scope', 'close', function (
 }]);
 'use strict';
 
-moviePitchApp.controller('MainController', ['$scope', 'ModalService', '$timeout', function ($scope, ModalService, $timeout) {
+moviePitchApp.controller('MainController', ['$scope', 'ModalService', '$timeout', '$state', function ($scope, ModalService, $timeout, $state) {
   $scope.isModalShown = "modal-hidden";
+
+  $scope.$on('logged-in', function (resp) {
+    console.log('working');
+    $scope.showLogout = "logout--show";
+  });
+
+  $scope.$on('logged-out', function (resp) {
+    $scope.showLogout = "";
+  });
+
+  $scope.logoutUser = function () {
+    $scope.showLogout = "";
+    $scope.$broadcast('logout-user');
+    $state.go('index');
+  };
 
   function openModalTasks() {
     $('.modal-close-animation').removeClass('modal-close-animation');
@@ -728,7 +764,7 @@ moviePitchApp.factory('paymentFactory', function ($http) {
 });
 "use strict";
 
-moviePitchApp.factory('pitchFactory', function ($q, $http) {
+moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
   var urlBase = "https://moviepitchapi.herokuapp.com";
 
   var factory = {
@@ -748,6 +784,7 @@ moviePitchApp.factory('pitchFactory', function ($q, $http) {
     },
 
     getPitchesByFilter: function getPitchesByFilter(filterString) {
+
       return $http({
         method: "GET",
         url: urlBase + "/pitch?" + filterString
@@ -926,6 +963,7 @@ moviePitchApp.factory('userFactory', function ($q, $rootScope, $location) {
 
       Parse.User.logIn(username, pwd).then(function (user) {
         $rootScope.curUser = user;
+
         deferred.resolve({
           status: "success",
           data: user
@@ -1057,6 +1095,8 @@ moviePitchApp.directive('adminPitchList', function () {
 
 			// Load all the unreviewed pitches
 			$scope.getPitches = function (status) {
+				// debugger;
+
 				pitchFactory.getPitchesByFilter('status=' + status).then(function (resp) {
 					console.log(resp);
 					$scope.pitches = resp.data.docs;
@@ -1112,124 +1152,11 @@ moviePitchApp.directive('adminPitch', function () {
 			});
 
 			$(el).find('.js-accept-rejected-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'accepted', 'rejected');
+				scope.updatePitch(attrs.id, 'pending', 'rejected');
 			});
 		},
 		restrict: "A"
 	};
-});
-"use strict";
-
-moviePitchApp.directive('contactUsForm', function (emailFactory, $timeout) {
-  return {
-    controller: function controller($scope) {
-      $scope.data = {
-        name: "",
-        email: "",
-        msgSubject: "General",
-        message: "",
-        subjects: ["General", "Billing", "Sales", "Support"],
-        errors: {
-          email: true,
-          username: true,
-          message: true
-        }
-      };
-
-      $scope.btnState = "btn--inactive";
-
-      $scope.btnStateChange = function () {
-        // console.log($scope.data.errors);
-        if ($scope.data.errors.email === true || $scope.data.errors.username === true || $scope.data.errors.message === true) {
-          $scope.btnState = "btn--inactive";
-        } else {
-          $scope.btnState = "";
-        }
-      };
-
-      $scope.validateName = function () {
-        // console.log('validating name');
-        if ($scope.data.name === "") {
-          $scope.data.errors.username = true;
-        } else {
-          $scope.data.errors.username = false;
-        }
-      };
-
-      $scope.validateEmail = function () {
-        // console.log('validating email');
-        emailFactory.validateEmail($scope.data.email).then(function (resp) {
-          $scope.data.errors.email = false;
-        }, function (err) {
-          $scope.data.errors.email = true;
-        });
-      };
-
-      $scope.validateMsg = function () {
-        // console.log('validating message');
-        if ($scope.data.name === "") {
-          $scope.data.errors.message = true;
-        } else {
-          $scope.data.errors.message = false;
-        }
-      };
-
-      var clearErrors = function clearErrors() {
-        $scope.messageError = "";
-        $scope.submitSuccess = "";
-      };
-
-      var clearFields = function clearFields() {
-        $scope.data.name = null;
-        $scope.data.email = null;
-        $scope.data.message = null;
-        $scope.data.msgSubject = "General";
-        $scope.btnState = "btn--inactive";
-      };
-
-      $scope.submitContactForm = function () {
-        if ($scope.btnState === "btn--inactive") {
-          // console.log('inactive');
-        } else {
-            clearErrors();
-            emailFactory.sendContactUsMessage($scope.data.name, $scope.data.email, $scope.data.msgSubject, $scope.data.message).then(function (resp) {
-              clearErrors();
-              clearFields();
-              $scope.submitSuccess = "show-alert";
-              $scope.successText = "Success! Your message has been submitted.";
-              // console.log(resp);
-              $timeout(function () {
-                $scope.submitSuccess = "";
-                $scope.successText = "";
-              }, 4000);
-            }, function (err) {
-              $scope.errorText = "An error has occurred. Your message was not sent.";
-              $scope.messageError = "show-alert";
-            });
-            // console.log($scope.data);
-          }
-      };
-    },
-    link: function link(scope, el, attrs) {
-      var $select = $('#contact-subject');
-
-      function selectReady() {
-        var numOptions = $select.find('option').length;
-
-        if (numOptions > 1) {
-          $select.fancySelect();
-        } else {
-          $timeout(selectReady, 50);
-        }
-      }
-
-      // The fancySelect function runs before the page
-      // is fully loaded, hence the timeout function
-      selectReady();
-    },
-    restrict: "A",
-    templateUrl: "dist/components/contact-us-form/contact-us-form.html"
-  };
 });
 'use strict';
 
@@ -1261,101 +1188,16 @@ moviePitchApp.directive('labelWrapper', function () {
 
 moviePitchApp.directive('appHeader', function ($state) {
   return {
-    controller: function controller($scope, userFactory) {
+    controller: function controller($scope) {
       $scope.menuToggleStatus = "menu-closed";
       $scope.currentLogAction = "show-login";
 
       $scope.toggleMenu = function () {
         $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
       };
-
-      $scope.$on('login-update', function () {
-        $scope.currentLogAction = "show-logout";
-      });
-
-      $scope.$on('logout-update', function () {
-        $scope.currentLogAction = "show-login";
-      });
-
-      $scope.logoutUser = function () {
-        userFactory.logoutUser().then(function (resp) {
-          console.log(resp);
-          $state.go('index');
-        }, function (err) {
-          console.log(err);
-        });
-      };
-
-      $scope.openLoginModal = function () {
-        // $('#login-modal').modal('show');
-      };
-    },
-
-    link: function link(scope, el, attrs) {
-      // $(el).find('.main-nav a').on('click', function(){
-      //   scope.toggleMenu();
-      // });
     },
     restrict: "A",
     templateUrl: "dist/components/nav/nav.html"
-  };
-});
-'use strict';
-
-moviePitchApp.directive('pressList', function () {
-	return {
-		controller: function controller($scope, PressFactory) {
-			PressFactory.getArticles().then(function (resp) {
-				console.log(resp);
-				$scope.articles = resp.articles;
-			}).catch(function (err) {
-				console.log(err);
-			});
-		}
-	};
-});
-"use strict";
-
-moviePitchApp.directive('successCarousel', function () {
-  return {
-    controller: function controller($scope) {
-      $scope.index = 1;
-
-      $scope.stories = [{
-        name: "Emily Lloyd",
-        text: "A grandmother from Ozark, Arkansas, sent Bob an index card about a man who lived in the Statue of Liberty. He sold the project to Universal Studios. Ryan Murphy (GLEE) wrote the script. “I can’t believe Bob was able to sell my one line idea. He was great to work with. I can’t wait to send him more.”"
-      }, {
-        name: "David Simon",
-        text: "I brought my original idea ‘The High School Security Tapes’ to Bob. He not only sold it to DreamWorks, he also made sure I got to write the screenplay. Since then, he sold another idea with Katherine Heigl to Fox 2000 and another with director Todd Phillips (THE HANGOVER) to Warner Brothers."
-      }, {
-        name: "Tom Newman",
-        text: "I was living in London when I heard about Bob Kosberg. I sent him a one page outline called ‘The Beauty Contest.’ Within one week, Bob had attached Meg Ryan to star and sold the project to New Line."
-      }, {
-        name: "Steve List",
-        text: "I attended one of Bob’s pitch events. I literally pitched Bob a thirty second story while we walked through the lobby. Bob had Paramount and Fox interested in buying my pitch and soon we had Drew Barrymore attached and I began writing the script at Fox Studios. I now have a writing career in Hollywood and it all started with Bob; he believed in my project and set it up at a studio."
-      }];
-
-      $scope.length = $scope.stories.length;
-      $scope.carouselClass = "test";
-
-      $scope.moveCarousel = function (dir) {
-        var curIndex = $scope.index;
-        var maxLength = $scope.length;
-        var integer = dir;
-
-        if (dir === 1 && curIndex === maxLength) {
-          $scope.index = 1;
-        } else if (dir === -1 && curIndex === 1) {
-          $scope.index = maxLength;
-        } else {
-          $scope.index = $scope.index + dir;
-        }
-
-        $scope.carouselClass = "carousel-" + $scope.index;
-      };
-    },
-    restrict: "A",
-    templateUrl: "dist/components/success-carousel/success-carousel.html"
   };
 });
 "use strict";

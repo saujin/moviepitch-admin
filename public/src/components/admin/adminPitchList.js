@@ -4,14 +4,17 @@ moviePitchApp.directive('adminPitchList', function(){
 
 			// Load all the unreviewed pitches
 			$scope.getPitches = function(status){
-				pitchFactory.getPitchesByFilter('status=' + status)
-				.then(function(resp){
-					console.log(resp);
-					$scope.pitches = resp.data.docs;
-				})
-				.catch(function(err){
-					console.log(err);
-				});
+				// debugger;
+
+				pitchFactory
+					.getPitchesByFilter('status=' + status)
+					.then(function(resp){
+						console.log(resp);
+						$scope.pitches = resp.data.docs;
+					})
+					.catch(function(err){
+						console.log(err);
+					});
 			}
 
 			// Reject a pitch by ID
@@ -66,7 +69,7 @@ moviePitchApp.directive('adminPitch', function(){
 			});
 
 			$(el).find('.js-accept-rejected-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'accepted', 'rejected');
+				scope.updatePitch(attrs.id, 'pending', 'rejected');
 			});
 		},
 		restrict: "A"
