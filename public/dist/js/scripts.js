@@ -276,15 +276,23 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
     if (requireLogin === true && $rootScope.curUser === null) {
       event.preventDefault();
       $rootScope.targetState = toState.name;
-      $state.go('login');
+      $state.go('index');
     }
   });
 });
 'use strict';
 
-moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFactory', '$state', 'pitchFactory', function ($scope, $rootScope, adminFactory, $state, pitchFactory) {
+moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFactory', '$state', 'pitchFactory', '$http', '$timeout', function ($scope, $rootScope, adminFactory, $state, pitchFactory, $http, $timeout) {
+
+	function clearFields() {
+		$scope.adminUsernameRegister = "";
+		$scope.adminEmailRegister = "";
+		$scope.adminPasswordRegister = "";
+		$scope.adminPasswordRegisterConfirm = "";
+	}
 
 	// Login an Admin
+	$scope.notification = "";
 	// $scope.adminEmail = "j@j.com";
 	// $scope.adminPassword = "test";
 	$scope.adminEmail = "";
@@ -292,7 +300,10 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	$scope.loginAdmin = function () {
 
 		adminFactory.loginAdmin($scope.adminEmail, $scope.adminPassword).then(function (resp) {
+			$http.defaults.headers.common.Authorization = "JWT " + resp.data.token;
 			$rootScope.curUser = resp.data.token;
+
+			$scope.$emit('logged-in', resp);
 
 			if ($rootScope.targetState === "" || $rootScope.targetState === undefined) {
 				$state.go('admin');
@@ -306,8 +317,14 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 		});
 	};
 
+	$scope.$on('logout-user', function () {
+		$scope.logoutAdmin();
+	});
+
 	// Logout an Admin
 	$scope.logoutAdmin = function () {
+		$http.defaults.headers.common.Authorization = "";
+
 		adminFactory.logoutAdmin().then(function (resp) {
 			console.log('Logging out');
 		}).catch(function (err) {
@@ -316,13 +333,13 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	};
 
 	// Register an Admin
-	$scope.adminUsernameRegister = "";
-	$scope.adminEmailRegister = "";
-	$scope.adminPasswordRegister = "";
-	$scope.adminPasswordRegisterConfirm = "";
-
+	clearFields();
 	$scope.registerAdmin = function () {
-		if ($scope.adminPasswordRegister === $scope.adminPasswordRegisterConfirm) {
+		if ($scope.adminUsernameRegister === "" || $scope.adminEmailRegister === "" || $scope.adminPasswordRegister === "" || $scope.adminPasswordRegisterConfirm === "") {
+			$scope.notification = "Please fill out all the fields to register an admin.";
+		} else if ($scope.adminPasswordRegister !== $scope.adminPasswordRegisterConfirm) {
+			$scope.notification = 'The passwords do not match.';
+		} else {
 			var data = {
 				name: $scope.adminUsernameRegister,
 				email: $scope.adminEmailRegister,
@@ -330,12 +347,16 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 			};
 
 			adminFactory.registerAdmin(data).then(function (resp) {
+				clearFields();
+				$scope.notification = "Account created.";
+				$timeout(function () {
+					$scope.notification = "";
+				}, 3000);
 				console.log(resp);
 			}).catch(function (err) {
-				console.log(err);
+				console.log(err.data.message);
+				$scope.notification = err.data.message;
 			});
-		} else {
-			console.log('passwords do not match');
 		}
 	};
 }]);
@@ -349,8 +370,23 @@ moviePitchApp.controller('CustomModalController', ['$scope', 'close', function (
 }]);
 'use strict';
 
-moviePitchApp.controller('MainController', ['$scope', 'ModalService', '$timeout', function ($scope, ModalService, $timeout) {
+moviePitchApp.controller('MainController', ['$scope', 'ModalService', '$timeout', '$state', function ($scope, ModalService, $timeout, $state) {
   $scope.isModalShown = "modal-hidden";
+
+  $scope.$on('logged-in', function (resp) {
+    console.log('working');
+    $scope.showLogout = "logout--show";
+  });
+
+  $scope.$on('logged-out', function (resp) {
+    $scope.showLogout = "";
+  });
+
+  $scope.logoutUser = function () {
+    $scope.showLogout = "";
+    $scope.$broadcast('logout-user');
+    $state.go('index');
+  };
 
   function openModalTasks() {
     $('.modal-close-animation').removeClass('modal-close-animation');
@@ -728,7 +764,7 @@ moviePitchApp.factory('paymentFactory', function ($http) {
 });
 "use strict";
 
-moviePitchApp.factory('pitchFactory', function ($q, $http) {
+moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
   var urlBase = "https://moviepitchapi.herokuapp.com";
 
   var factory = {
@@ -748,6 +784,7 @@ moviePitchApp.factory('pitchFactory', function ($q, $http) {
     },
 
     getPitchesByFilter: function getPitchesByFilter(filterString) {
+
       return $http({
         method: "GET",
         url: urlBase + "/pitch?" + filterString
@@ -926,6 +963,7 @@ moviePitchApp.factory('userFactory', function ($q, $rootScope, $location) {
 
       Parse.User.logIn(username, pwd).then(function (user) {
         $rootScope.curUser = user;
+
         deferred.resolve({
           status: "success",
           data: user
@@ -1057,6 +1095,8 @@ moviePitchApp.directive('adminPitchList', function () {
 
 			// Load all the unreviewed pitches
 			$scope.getPitches = function (status) {
+				// debugger;
+
 				pitchFactory.getPitchesByFilter('status=' + status).then(function (resp) {
 					console.log(resp);
 					$scope.pitches = resp.data.docs;
@@ -1112,7 +1152,7 @@ moviePitchApp.directive('adminPitch', function () {
 			});
 
 			$(el).find('.js-accept-rejected-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'accepted', 'rejected');
+				scope.updatePitch(attrs.id, 'pending', 'rejected');
 			});
 		},
 		restrict: "A"
@@ -1148,40 +1188,13 @@ moviePitchApp.directive('labelWrapper', function () {
 
 moviePitchApp.directive('appHeader', function ($state) {
   return {
-    controller: function controller($scope, userFactory) {
+    controller: function controller($scope) {
       $scope.menuToggleStatus = "menu-closed";
       $scope.currentLogAction = "show-login";
 
       $scope.toggleMenu = function () {
         $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
       };
-
-      $scope.$on('login-update', function () {
-        $scope.currentLogAction = "show-logout";
-      });
-
-      $scope.$on('logout-update', function () {
-        $scope.currentLogAction = "show-login";
-      });
-
-      $scope.logoutUser = function () {
-        userFactory.logoutUser().then(function (resp) {
-          console.log(resp);
-          $state.go('index');
-        }, function (err) {
-          console.log(err);
-        });
-      };
-
-      $scope.openLoginModal = function () {
-        // $('#login-modal').modal('show');
-      };
-    },
-
-    link: function link(scope, el, attrs) {
-      // $(el).find('.main-nav a').on('click', function(){
-      //   scope.toggleMenu();
-      // });
     },
     restrict: "A",
     templateUrl: "dist/components/nav/nav.html"

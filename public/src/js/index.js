@@ -85,7 +85,7 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
       if(requireLogin === true && $rootScope.curUser === null){
         event.preventDefault();
         $rootScope.targetState = toState.name;
-        $state.go('login');
+        $state.go('index');
       }
     });
   });

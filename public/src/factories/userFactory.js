@@ -22,6 +22,7 @@ moviePitchApp.factory('userFactory', function($q, $rootScope, $location){
       Parse.User.logIn(username, pwd).then(
         function(user){
           $rootScope.curUser = user;
+
           deferred.resolve({
             status: "success",
             data: user

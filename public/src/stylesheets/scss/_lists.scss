@@ -22,3 +22,46 @@
 	 	margin-bottom: 1rem;
 	 }
 }
+
+.current-admin-list {
+	margin-bottom: 50px;
+	padding-left: 0px;
+}
+
+.admin-user {
+	display: flex;
+	padding: 1rem 0;
+
+	> div {
+		flex: 1 1 auto;
+	}
+
+	> button {
+		background: none;
+		color: $tomato;
+		flex: 0 0 120px;
+		font-size: .825rem;
+		padding: 0;
+		width: 200px;
+	}
+}
+
+.admin-user + .admin-user {
+	border-top: solid 1px $pale-grey;
+}
+.pitch-list-item {
+	border-top: solid 1px $pale-grey;
+	padding: 1.5rem 0;
+
+	&:first-of-type{
+		margin-top: 2rem;
+	}
+
+	.pitch-genre {
+		text-transform: uppercase;
+	}
+
+	p {
+		font-size: 1rem;
+	}
+}

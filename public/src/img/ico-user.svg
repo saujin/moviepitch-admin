@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="15px" height="18px" viewBox="0 0 15 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
+    <title>ico-user</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <path d="M9.6196372,8.8264 C10.7275572,7.59938667 11.3165705,5.59738667 11.3189172,4.24072 C11.3221439,2.16010667 9.60585053,0 7.41846386,0 C5.2310772,0 3.51449053,2.16098667 3.51801053,4.24072 C3.5203572,5.60325333 4.11494386,7.6164 5.23225053,8.84253333 C2.67702386,9.61370667 0.443583864,11.6567733 0.0161971971,14.3516267 C-0.160096136,15.46776 1.1425972,16.2090133 1.9847572,16.5882933 C3.6382772,17.3330667 5.52793053,17.5862133 7.32782386,17.5988267 C9.1497172,17.6126133 11.0540372,17.3767733 12.7430505,16.6639733 C13.6300905,16.2902667 15.0759305,15.5317067 14.8893705,14.3516267 C14.4584639,11.63712 12.1977439,9.58496 9.6196372,8.8264 Z" id="ico-user" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+    </g>
+</svg>
