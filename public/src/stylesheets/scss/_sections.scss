@@ -136,7 +136,6 @@
 }
 
 .section-nav-link {
-  border-left: solid 1px $purplish-grey;
   color: $purplish-grey;
   display: block;
   font-size: 1rem;
@@ -146,7 +145,6 @@
 }
 
 .section-nav-link--active {
-  border-left: solid 1px $tomato;
   color: $tomato;
 }
 
@@ -161,19 +159,63 @@
     margin-right: 30px;
   }
 
+  .section-content--has-nav {
+    padding: 0;
+  }
+
   .section-content-nav {
+    background: $white;
     margin-bottom: 1rem;
+    position: absolute;
+    transition: all 0.35s;
+    transform: translateY(-100%);
+    width: 100%;
+    z-index: 50;
+
+    button {
+      background: black;
+      border: none;
+      bottom: -35px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      content: "MENU";
+      color: $white;
+      cursor: pointer;
+      display: block;
+      left: 50%;
+      height: 35px;
+      margin-left: -40px;
+      outline: none;
+      padding: 0 5px 5px 5px;
+      position: absolute;
+      text-align: center;
+      text-transform: uppercase;
+      width: 80px;
+      z-index: 5;
+    }
+  }
+
+  .section-content-nav--is-shown {
+    transform: translateY(0%);
+  }
+
+  .section-content-content {
+    margin-top: 20px;
+    padding: 20px;
   }
 
   .section-nav-link {
     font-size: 1.25rem;
     font-weight: 700;
     padding: 10px 0;
+    position: relative;
     text-align: center;
+    z-index: 10;
   }
 
-  .section-nav-link + .section-nav-link {
-    border-top: solid 1px $dark-grey;
+  .section-nav-link {
+    background: $white;
+    border-bottom: solid 1px $dark-grey;
   }
 }
 
@@ -187,8 +229,20 @@
     margin-top: 30px;
   }
 
+  .section-nav-link {
+    border-left: solid 1px $purplish-grey;
+  }
+
+  .section-nav-link--active {
+    border-left: solid 1px $tomato;
+  }
+
   .section-content-nav {
     flex: 3 3 25%;
+
+    button {
+      display: none;
+    }
   }
 
   .section-content-content {

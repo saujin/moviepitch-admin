@@ -284,6 +284,12 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
 
 moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFactory', '$state', 'pitchFactory', '$http', '$timeout', function ($scope, $rootScope, adminFactory, $state, pitchFactory, $http, $timeout) {
 
+	$scope.isMobileNavOpen = "";
+	$scope.toggleMobileNav = function () {
+		console.log('working');
+		$scope.isMobileNavOpen = $scope.isMobileNavOpen === "" ? "section-content-nav--is-shown" : "";
+	};
+
 	function clearFields() {
 		$scope.adminUsernameRegister = "";
 		$scope.adminEmailRegister = "";
@@ -292,11 +298,11 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	}
 
 	// Login an Admin
-	$scope.notification = "";
-	// $scope.adminEmail = "j@j.com";
-	// $scope.adminPassword = "test";
-	$scope.adminEmail = "";
-	$scope.adminPassword = "";
+	// $scope.notification = "";
+	$scope.adminEmail = "j@j.com";
+	$scope.adminPassword = "test";
+	// $scope.adminEmail = "";
+	// $scope.adminPassword = "";
 	$scope.loginAdmin = function () {
 
 		adminFactory.loginAdmin($scope.adminEmail, $scope.adminPassword).then(function (resp) {
@@ -1158,6 +1164,22 @@ moviePitchApp.directive('adminPitch', function () {
 		restrict: "A"
 	};
 });
+"use strict";
+
+moviePitchApp.directive('appHeader', function ($state) {
+  return {
+    controller: function controller($scope) {
+      $scope.menuToggleStatus = "menu-closed";
+      $scope.currentLogAction = "show-login";
+
+      $scope.toggleMenu = function () {
+        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
+      };
+    },
+    restrict: "A",
+    templateUrl: "dist/components/nav/nav.html"
+  };
+});
 'use strict';
 
 moviePitchApp.directive('labelWrapper', function () {
@@ -1182,22 +1204,6 @@ moviePitchApp.directive('labelWrapper', function () {
       });
     },
     restrict: "A"
-  };
-});
-"use strict";
-
-moviePitchApp.directive('appHeader', function ($state) {
-  return {
-    controller: function controller($scope) {
-      $scope.menuToggleStatus = "menu-closed";
-      $scope.currentLogAction = "show-login";
-
-      $scope.toggleMenu = function () {
-        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
-      };
-    },
-    restrict: "A",
-    templateUrl: "dist/components/nav/nav.html"
   };
 });
 "use strict";

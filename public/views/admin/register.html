@@ -2,7 +2,7 @@
 
 <section ng-controller="AdminController" class="section section--regular">
   <div class="section-content section-content--has-nav">
-    <div class="section-content-nav" ng-include src="'views/subviews/admin-nav.html'"></div>
+    <div class="section-content-nav {{isMobileNavOpen}}" ng-include src="'views/subviews/admin-nav.html'"></div>
 
     <div class="section-content-content">
       <h3 class="card-heading">Register A New Admin</h3>
