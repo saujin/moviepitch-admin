@@ -10,6 +10,7 @@
         <h3 class="card-heading">Accepted Pitches</h3>
         <p>These pitches have been sold to a studio.</p>
 
+        <div class="pitch-list-item">There are currently {{pitches.length}} accepted pitches.</div>
         <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
