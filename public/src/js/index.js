@@ -31,43 +31,50 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
             requireLogin: true
           }
         })
-        .state('admin-register', {
-          url: "/admin/register",
-          templateUrl: "views/admin/register.html",
+        .state('admin-manage', {
+          url: "/admin/manage-admins",
+          templateUrl: "views/admin/manage-admins.html",
           data: {
             requireLogin: true
           }
         })
         .state('admin-notifications', {
-          url: "/admin/notifications",
-          templateUrl: "views/admin/notifications.html",
+          url: "/admin/mail-notifications",
+          templateUrl: "views/admin/mail-notifications.html",
           data: {
             requireLogin: true
           }
         })
         .state('admin-unreviewed', {
-          url: "/admin/pitches/unreviewed",
+          url: "/admin/pitches",
           templateUrl: "views/admin/unreviewed-pitches.html",
           data: {
             requireLogin: true
           }
         })
-        .state('admin-pending', {
-          url: "/admin/pitches/pending",
-          templateUrl: "views/admin/pending-pitches.html",
+        .state('admin-under-consideration', {
+          url: "/admin/pitches/under-consideration",
+          templateUrl: "views/admin/under-consideration-pitches.html",
           data: {
             requireLogin: true
           }
         })
-        .state('admin-accepted', {
-          url: "/admin/pitches-accepted",
-          templateUrl: "views/admin/accepted-pitches.html",
+        .state('admin-in-negotiation', {
+          url: "/admin/pitches/in-negotiation",
+          templateUrl: "views/admin/in-negotiation-pitches.html",
+          data: {
+            requireLogin: true
+          }
+        })
+        .state('admin-sold', {
+          url: "/admin/pitches/sold",
+          templateUrl: "views/admin/sold-pitches.html",
           data: {
             requireLogin: true
           }
         })
         .state('admin-rejected', {
-          url: "/admin/pitches-rejected",
+          url: "/admin/pitches/rejected",
           templateUrl: "views/admin/rejected-pitches.html",
           data: {
             requireLogin: true
@@ -86,6 +93,12 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
         event.preventDefault();
         $rootScope.targetState = toState.name;
         $state.go('index');
+      }
+
+      if(toState.name === "index" && $rootScope.curUser !== null){
+        event.preventDefault();
+        $rootScope.targetState = "admin";
+        $state.go('admin');
       }
     });
   });

@@ -230,38 +230,44 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
     data: {
       requireLogin: true
     }
-  }).state('admin-register', {
-    url: "/admin/register",
-    templateUrl: "views/admin/register.html",
+  }).state('admin-manage', {
+    url: "/admin/manage-admins",
+    templateUrl: "views/admin/manage-admins.html",
     data: {
       requireLogin: true
     }
   }).state('admin-notifications', {
-    url: "/admin/notifications",
-    templateUrl: "views/admin/notifications.html",
+    url: "/admin/mail-notifications",
+    templateUrl: "views/admin/mail-notifications.html",
     data: {
       requireLogin: true
     }
   }).state('admin-unreviewed', {
-    url: "/admin/pitches/unreviewed",
+    url: "/admin/pitches",
     templateUrl: "views/admin/unreviewed-pitches.html",
     data: {
       requireLogin: true
     }
-  }).state('admin-pending', {
-    url: "/admin/pitches/pending",
-    templateUrl: "views/admin/pending-pitches.html",
+  }).state('admin-under-consideration', {
+    url: "/admin/pitches/under-consideration",
+    templateUrl: "views/admin/under-consideration-pitches.html",
     data: {
       requireLogin: true
     }
-  }).state('admin-accepted', {
-    url: "/admin/pitches-accepted",
-    templateUrl: "views/admin/accepted-pitches.html",
+  }).state('admin-in-negotiation', {
+    url: "/admin/pitches/in-negotiation",
+    templateUrl: "views/admin/in-negotiation-pitches.html",
+    data: {
+      requireLogin: true
+    }
+  }).state('admin-sold', {
+    url: "/admin/pitches/sold",
+    templateUrl: "views/admin/sold-pitches.html",
     data: {
       requireLogin: true
     }
   }).state('admin-rejected', {
-    url: "/admin/pitches-rejected",
+    url: "/admin/pitches/rejected",
     templateUrl: "views/admin/rejected-pitches.html",
     data: {
       requireLogin: true
@@ -277,6 +283,12 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
       event.preventDefault();
       $rootScope.targetState = toState.name;
       $state.go('index');
+    }
+
+    if (toState.name === "index" && $rootScope.curUser !== null) {
+      event.preventDefault();
+      $rootScope.targetState = "admin";
+      $state.go('admin');
     }
   });
 });
@@ -298,9 +310,6 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	}
 
 	// Login an Admin
-	// $scope.notification = "";
-	// $scope.adminEmail = "j@j.com";
-	// $scope.adminPassword = "test";
 	$scope.adminEmail = "";
 	$scope.adminPassword = "";
 	$scope.loginAdmin = function () {
@@ -1164,6 +1173,22 @@ moviePitchApp.directive('adminPitch', function () {
 		restrict: "A"
 	};
 });
+"use strict";
+
+moviePitchApp.directive('appHeader', function ($state) {
+  return {
+    controller: function controller($scope) {
+      $scope.menuToggleStatus = "menu-closed";
+      $scope.currentLogAction = "show-login";
+
+      $scope.toggleMenu = function () {
+        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
+      };
+    },
+    restrict: "A",
+    templateUrl: "dist/components/nav/nav.html"
+  };
+});
 'use strict';
 
 moviePitchApp.directive('labelWrapper', function () {
@@ -1188,22 +1213,6 @@ moviePitchApp.directive('labelWrapper', function () {
       });
     },
     restrict: "A"
-  };
-});
-"use strict";
-
-moviePitchApp.directive('appHeader', function ($state) {
-  return {
-    controller: function controller($scope) {
-      $scope.menuToggleStatus = "menu-closed";
-      $scope.currentLogAction = "show-login";
-
-      $scope.toggleMenu = function () {
-        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
-      };
-    },
-    restrict: "A",
-    templateUrl: "dist/components/nav/nav.html"
   };
 });
 "use strict";

@@ -233,6 +233,10 @@
     border-left: solid 1px $purplish-grey;
   }
 
+  .section-nav-link--section-break {
+    margin-bottom: 20px;
+  }
+
   .section-nav-link--active {
     border-left: solid 1px $tomato;
   }

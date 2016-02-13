@@ -6,21 +6,17 @@
 
     <div class="section-content-content">
       <!-- List All Pitches -->
-      <div admin-pitch-list data-status="pending" class="pitch-list">
-        <h3 class="card-heading">Pending Pitches</h3>
-        <p>Pending pitches are waiting for studio decisions.</p>
+      <div admin-pitch-list data-status="accepted" class="pitch-list">
+        <h3 class="card-heading">Purchased Pitches</h3>
+        <p>These pitches have been sold to a studio.</p>
 
-        <div class="pitch-list-item">There are currently {{pitches.length}} pending pitches.</div>
+        <div class="pitch-list-item">There are currently {{pitches.length}} pitches that have been sold.</div>
         <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
-          <div class="btn-container pitch-actions">
-            <button class="btn btn--tertiary js-reject-pending-pitch">Reject</button>
-            <button class="btn btn--secondary js-accept-pending-pitch">Accept</button>
+          <div class="btn-container">
           </div>
         </div>
-
-
       </div>
     </div>
   </div>

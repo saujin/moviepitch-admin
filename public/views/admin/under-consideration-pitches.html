@@ -6,18 +6,21 @@
 
     <div class="section-content-content">
       <!-- List All Pitches -->
-      <div admin-pitch-list data-status="rejected" class="pitch-list">
-        <h3 class="card-heading">Rejected Pitches</h3>
-        <p>Hitting "move under consideration" will move pitches into the "Under Consideration" list.</p>
+      <div admin-pitch-list data-status="pending" class="pitch-list">
+        <h3 class="card-heading">Under Consideration Pitches</h3>
+        <p>These pitches are have made it past the first round of review and are available to be pitched to studios.</p>
 
-        <div class="pitch-list-item">There are currently {{pitches.length}} rejected pitches.</div>
+        <div class="pitch-list-item">There are currently {{pitches.length}} pitches under consideration.</div>
         <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
           <div class="btn-container pitch-actions">
-            <button class="btn btn--secondary js-accept-rejected-pitch">Move Under Consideration</button>
+            <button class="btn btn--tertiary js-reject-pending-pitch">Reject</button>
+            <button class="btn btn--secondary js-accept-pending-pitch">Move to Negotiation</button>
           </div>
         </div>
+
+
       </div>
     </div>
   </div>
