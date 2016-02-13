@@ -299,10 +299,10 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 
 	// Login an Admin
 	// $scope.notification = "";
-	$scope.adminEmail = "j@j.com";
-	$scope.adminPassword = "test";
-	// $scope.adminEmail = "";
-	// $scope.adminPassword = "";
+	// $scope.adminEmail = "j@j.com";
+	// $scope.adminPassword = "test";
+	$scope.adminEmail = "";
+	$scope.adminPassword = "";
 	$scope.loginAdmin = function () {
 
 		adminFactory.loginAdmin($scope.adminEmail, $scope.adminPassword).then(function (resp) {

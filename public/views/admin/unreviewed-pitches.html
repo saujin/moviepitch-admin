@@ -10,6 +10,7 @@
         <h3 class="card-heading">Unreviewed Pitches</h3>
         <p>Here are all the currently unriewed pitches that have been submitted to moviepitch.com. Mark a pitch as "accepted" to move it to the "pending" list to wait for a studio decision. Reject pitches that will not be pitched.</p>
 
+        <div class="pitch-list-item">There are currently {{pitches.length}} unreviewed pitches.</div>
         <div class="pitch-list-item" admin-pitch ng-repeat="pitch in pitches" data-id="{{pitch._id}}">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>

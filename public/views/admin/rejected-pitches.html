@@ -10,6 +10,7 @@
         <h3 class="card-heading">Rejected Pitches</h3>
         <p>Hitting "accept" will move pitches into the "Pending" pitch list.</p>
 
+        <div class="pitch-list-item">There are currently {{pitches.length}} rejected pitches.</div>
         <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
