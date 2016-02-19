@@ -11,12 +11,12 @@
         <p>In negotiation pitches are currently being negotiated.</p>
 
         <div class="pitch-list-item">There are currently {{pitches.length}} pitches in negotiation.</div>
-        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
+        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}" data-current-status="in_negotiation">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
           <div class="btn-container pitch-actions">
-            <button class="btn btn--tertiary js-reject-negotiated-pitch">Reject</button>
-            <button class="btn btn--secondary js-accept-negotiated-pitch">Mark as Sold</button>
+            <button class="btn btn--tertiary" data-to-status="rejected">Reject</button>
+            <button class="btn btn--secondary" data-to-status="accepted">Mark as Sold</button>
           </div>
         </div>
       </div>

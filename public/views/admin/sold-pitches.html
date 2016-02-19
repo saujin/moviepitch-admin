@@ -11,7 +11,7 @@
         <p>These pitches have been sold to a studio.</p>
 
         <div class="pitch-list-item">There are currently {{pitches.length}} pitches that have been sold.</div>
-        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
+        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}" data-current-status="accepted">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
           <div class="btn-container">

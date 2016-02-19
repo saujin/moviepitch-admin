@@ -11,11 +11,11 @@
         <p>Hitting "move under consideration" will move pitches into the "Under Consideration" list.</p>
 
         <div class="pitch-list-item">There are currently {{pitches.length}} rejected pitches.</div>
-        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
+        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}" data-current-status="rejected">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
           <div class="btn-container pitch-actions">
-            <button class="btn btn--secondary js-accept-rejected-pitch">Move Under Consideration</button>
+            <button class="btn btn--secondary" data-to-status="under_consideration">Move Under Consideration</button>
           </div>
         </div>
       </div>

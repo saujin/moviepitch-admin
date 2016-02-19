@@ -8,15 +8,15 @@
       <!-- List All Pitches -->
       <div admin-pitch-list data-status="unreviewed" class="pitch-list">
         <h3 class="card-heading">Unreviewed Pitches</h3>
-        <p>Here are all the currently unriewed pitches that have been submitted to moviepitch.com. Mark a pitch as "accepted" to move it to the "pending" list to wait for a studio decision. Reject pitches that will not be pitched.</p>
+        <p>Here are all the currently unriewed pitches that have been submitted. Move a pitch to the "under consideration" list if it might possibly be pitched. Immediately reject pitches that will not be pitched.</p>
 
         <div class="pitch-list-item">There are currently {{pitches.length}} unreviewed pitches.</div>
-        <div class="pitch-list-item" admin-pitch ng-repeat="pitch in pitches" data-id="{{pitch._id}}">
+        <div class="pitch-list-item" admin-pitch ng-repeat="pitch in pitches" data-id="{{pitch._id}}" data-current-status="unreviewed">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
           <div class="btn-container pitch-actions">
-            <button class="btn btn--tertiary js-reject-unreviewed-pitch">Reject</button>
-            <button class="btn btn--secondary js-accept-unreviewed-pitch">Move Under Consideration</button>
+            <button class="btn btn--tertiary" data-to-status="rejected">Reject</button>
+            <button class="btn btn--secondary" data-to-status="under_consideration">Move Under Consideration</button>
           </div>
         </div>
       </div>

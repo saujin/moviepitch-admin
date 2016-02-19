@@ -4,12 +4,10 @@ moviePitchApp.directive('adminPitchList', function(){
 
 			// Load all the unreviewed pitches
 			$scope.getPitches = function(status){
-				// debugger;
-
 				pitchFactory
 					.getPitchesByFilter('status=' + status)
 					.then(function(resp){
-						// console.log(resp);
+						console.log(resp);
 						$scope.pitches = resp.data.docs;
 					})
 					.catch(function(err){
@@ -32,7 +30,6 @@ moviePitchApp.directive('adminPitchList', function(){
 			$scope.updatePitch = function(id, data, status){
 				pitchFactory.updatePitchStatus(id, data)
 					.then(function(resp){
-						// console.log(resp);
 						$scope.getPitches(status);
 					})
 					.catch(function(err){

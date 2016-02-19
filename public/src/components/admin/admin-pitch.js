@@ -1,32 +1,11 @@
 moviePitchApp.directive('adminPitch', function(){
 	return {
 		link: function(scope, el, attrs){
-			$(el).find('.js-reject-unreviewed-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'rejected', 'unreviewed');
-			});
+			const curState = el.attr('data-current-status');
 
-			$(el).find('.js-accept-unreviewed-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'under_consideration', 'unreviewed');
-			});
-
-			$(el).find('.js-reject-under-consideration-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'rejected', 'under_consideration');
-			});
-
-			$(el).find('.js-negotiate-under-consideration-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'in_negotiation', 'under_consideration');
-			});
-
-			$(el).find('.js-reject-under-consideration-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'rejected', 'under_consideration');
-			});
-
-			$(el).find('.js-negotiate-under-consideration-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'in_negotiation', 'under_consideration');
-			});
-
-			$(el).find('.js-consider-rejected-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'under_consideration', 'rejected');
+			el.find('button').on('click', function(){
+				const newState = this.getAttribute('data-to-status');
+				scope.updatePitch(attrs.id, newState, curState);
 			});
 		},
 		restrict: "A"

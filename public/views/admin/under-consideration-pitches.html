@@ -8,15 +8,15 @@
       <!-- List All Pitches -->
       <div admin-pitch-list data-status="under_consideration" class="pitch-list">
         <h3 class="card-heading">Under Consideration Pitches</h3>
-        <p>These pitches are have made it past the first round of review and are available to be pitched to studios.</p>
+        <p>These pitches are have made it past the first round of review and are waiting to be pitched to studios. Successfully pitched ideas should be moved to the "negotiation" phase.</p>
 
         <div class="pitch-list-item">There are currently {{pitches.length}} pitches under consideration.</div>
-        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}">
+        <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}" data-current-status="under_consideration">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
           <div class="btn-container pitch-actions">
-            <button class="btn btn--tertiary js-reject-pending-pitch">Reject</button>
-            <button class="btn btn--secondary js-accept-pending-pitch">Move to Negotiation</button>
+            <button class="btn btn--tertiary"  data-to-status="rejected">Reject</button>
+            <button class="btn btn--secondary"  data-to-status="in_negotiation">Move to Negotiation</button>
           </div>
         </div>
 

@@ -34586,7 +34586,7 @@ moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
     },
 
     updatePitchStatus: function updatePitchStatus(id, status) {
-      var validStatuses = ["created", "rejected", "pending", "accepted"];
+      var validStatuses = ["unreviewed", "under_consideration", "in_negotiation", "accepted", "rejected"];
       var testResults = false;
 
       // test each valid status against passed in status
@@ -34839,10 +34839,8 @@ moviePitchApp.directive('adminPitchList', function () {
 
 			// Load all the unreviewed pitches
 			$scope.getPitches = function (status) {
-				// debugger;
-
 				pitchFactory.getPitchesByFilter('status=' + status).then(function (resp) {
-					// console.log(resp);
+					console.log(resp);
 					$scope.pitches = resp.data.docs;
 				}).catch(function (err) {
 					console.log(err);
@@ -34861,7 +34859,6 @@ moviePitchApp.directive('adminPitchList', function () {
 
 			$scope.updatePitch = function (id, data, status) {
 				pitchFactory.updatePitchStatus(id, data).then(function (resp) {
-					// console.log(resp);
 					$scope.getPitches(status);
 				}).catch(function (err) {
 					console.log(err);
@@ -34880,32 +34877,11 @@ moviePitchApp.directive('adminPitchList', function () {
 moviePitchApp.directive('adminPitch', function () {
 	return {
 		link: function link(scope, el, attrs) {
-			$(el).find('.js-reject-unreviewed-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'rejected', 'unreviewed');
-			});
+			var curState = el.attr('data-current-status');
 
-			$(el).find('.js-accept-unreviewed-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'under_consideration', 'unreviewed');
-			});
-
-			$(el).find('.js-reject-under-consideration-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'rejected', 'under_consideration');
-			});
-
-			$(el).find('.js-negotiate-under-consideration-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'in_negotiation', 'under_consideration');
-			});
-
-			$(el).find('.js-reject-under-consideration-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'rejected', 'under_consideration');
-			});
-
-			$(el).find('.js-negotiate-under-consideration-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'in_negotiation', 'under_consideration');
-			});
-
-			$(el).find('.js-consider-rejected-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'under_consideration', 'rejected');
+			el.find('button').on('click', function () {
+				var newState = this.getAttribute('data-to-status');
+				scope.updatePitch(attrs.id, newState, curState);
 			});
 		},
 		restrict: "A"

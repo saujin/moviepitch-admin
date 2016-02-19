@@ -57,7 +57,13 @@ moviePitchApp.factory('pitchFactory', function($q, $http, $rootScope) {
     },
 
     updatePitchStatus: function(id, status){
-      const validStatuses = ["created", "rejected", "pending", "accepted"];
+      const validStatuses = [
+        "unreviewed",
+        "under_consideration",
+        "in_negotiation",
+        "accepted",
+        "rejected"
+      ];
       let testResults = false;
 
       // test each valid status against passed in status
