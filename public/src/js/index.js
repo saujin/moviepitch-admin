@@ -2,11 +2,9 @@
 
 require('angular');
 require('angular-ui-router');
-require('angular-modal-service');
 
 const controllerArray = [
-  "ui.router",
-  "angularModalService"
+  "ui.router"
 ];
 
 let moviePitchApp = angular.module("moviePitchApp", controllerArray)
