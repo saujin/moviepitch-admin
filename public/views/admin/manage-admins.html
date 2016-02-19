@@ -6,7 +6,12 @@
 
     <div class="section-content-content">
       <h3 class="card-heading">Manage Existing Admins</h3>
-      <p>[Under Construction]</p>
+      <ul class="admin-list" admin-account-list>
+        <li class="admin-user" ng-repeat="admin in admins">
+          <div>{{admin.email}}</div>
+          <!-- <button class="btn" ng-click="">delete</button> -->
+        </li>
+      </ul>
 
       <h3 class="card-heading">Register A New Admin</h3>
       <div class="label-wrapper" label-wrapper>

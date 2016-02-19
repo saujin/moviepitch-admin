@@ -5,7 +5,6 @@ moviePitchApp.controller('AdminController',
 
 	$scope.isMobileNavOpen = "";
   $scope.toggleMobileNav = function(){
-  	console.log('working');
     $scope.isMobileNavOpen = $scope.isMobileNavOpen === "" ? "section-content-nav--is-shown" : "";
   }
 
@@ -17,8 +16,9 @@ moviePitchApp.controller('AdminController',
 	}
 
 	// Login an Admin
-	$scope.adminEmail = "";
-	$scope.adminPassword = "";
+	$scope.adminEmail = "j@j.com";
+	$scope.adminPassword = "test";
+
 	$scope.loginAdmin = function(){
 
 		adminFactory
@@ -40,7 +40,7 @@ moviePitchApp.controller('AdminController',
 			.catch(function(err){
 				console.log(err);
 			});
-	}
+	};
 
 	$scope.$on('logout-user', function(){
 		$scope.logoutAdmin();
@@ -61,6 +61,7 @@ moviePitchApp.controller('AdminController',
 
 	// Register an Admin
 	clearFields();
+
 	$scope.registerAdmin = function(){
 		if(
 			$scope.adminUsernameRegister === "" ||

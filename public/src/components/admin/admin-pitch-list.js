@@ -49,29 +49,3 @@ moviePitchApp.directive('adminPitchList', function(){
 	}
 });
 
-moviePitchApp.directive('adminPitch', function(){
-	return {
-		link: function(scope, el, attrs){
-			$(el).find('.js-reject-unreviewed-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'rejected', 'created');
-			});
-
-			$(el).find('.js-accept-unreviewed-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'pending', 'created');
-			});
-
-			$(el).find('.js-reject-pending-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'rejected', 'pending');
-			});
-
-			$(el).find('.js-accept-pending-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'accepted', 'pending');
-			});
-
-			$(el).find('.js-accept-rejected-pitch').on('click', function(){
-				scope.updatePitch(attrs.id, 'pending', 'rejected');
-			});
-		},
-		restrict: "A"
-	}
-});

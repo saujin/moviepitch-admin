@@ -10,6 +10,13 @@ moviePitchApp.factory('adminFactory', function($http, $q, $rootScope){
   };
 
   let factory = {
+    getAllAccounts: function(){
+      return $http({
+        method: "GET",
+        url: urlBase + "/admin/users"
+      })
+    },
+
     getAdminEmails: function(){
       return $http({
         method: "GET",

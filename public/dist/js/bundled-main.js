@@ -35418,7 +35418,6 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 
 	$scope.isMobileNavOpen = "";
 	$scope.toggleMobileNav = function () {
-		console.log('working');
 		$scope.isMobileNavOpen = $scope.isMobileNavOpen === "" ? "section-content-nav--is-shown" : "";
 	};
 
@@ -35430,8 +35429,9 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	}
 
 	// Login an Admin
-	$scope.adminEmail = "";
-	$scope.adminPassword = "";
+	$scope.adminEmail = "j@j.com";
+	$scope.adminPassword = "test";
+
 	$scope.loginAdmin = function () {
 
 		adminFactory.loginAdmin($scope.adminEmail, $scope.adminPassword).then(function (resp) {
@@ -35469,6 +35469,7 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 
 	// Register an Admin
 	clearFields();
+
 	$scope.registerAdmin = function () {
 		if ($scope.adminUsernameRegister === "" || $scope.adminEmailRegister === "" || $scope.adminPasswordRegister === "" || $scope.adminPasswordRegisterConfirm === "") {
 			$scope.notification = "Please fill out all the fields to register an admin.";
@@ -35609,6 +35610,13 @@ moviePitchApp.factory('adminFactory', function ($http, $q, $rootScope) {
   };
 
   var factory = {
+    getAllAccounts: function getAllAccounts() {
+      return $http({
+        method: "GET",
+        url: urlBase + "/admin/users"
+      });
+    },
+
     getAdminEmails: function getAdminEmails() {
       return $http({
         method: "GET",
@@ -36172,6 +36180,21 @@ moviePitchApp.factory('userFactory', function ($q, $rootScope, $location) {
 });
 "use strict";
 
+moviePitchApp.directive('adminAccountList', function () {
+	return {
+		controller: function controller($scope, adminFactory) {
+			// get a list of admin Accounts
+			adminFactory.getAllAccounts().then(function (resp) {
+				$scope.admins = resp.data;
+			}).catch(function (err) {
+				console.log(err);
+			});
+		},
+		restrict: "A"
+	};
+});
+"use strict";
+
 moviePitchApp.directive('adminContactEmail', function () {
 	return {
 		controller: function controller($scope, adminFactory, emailFactory) {
@@ -36266,28 +36289,37 @@ moviePitchApp.directive('adminPitchList', function () {
 		restrict: "A"
 	};
 });
+'use strict';
 
 moviePitchApp.directive('adminPitch', function () {
 	return {
 		link: function link(scope, el, attrs) {
 			$(el).find('.js-reject-unreviewed-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'rejected', 'created');
+				scope.updatePitch(attrs.id, 'rejected', 'unreviewed');
 			});
 
 			$(el).find('.js-accept-unreviewed-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'pending', 'created');
+				scope.updatePitch(attrs.id, 'under_consideration', 'unreviewed');
 			});
 
-			$(el).find('.js-reject-pending-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'rejected', 'pending');
+			$(el).find('.js-reject-under-consideration-pitch').on('click', function () {
+				scope.updatePitch(attrs.id, 'rejected', 'under_consideration');
 			});
 
-			$(el).find('.js-accept-pending-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'accepted', 'pending');
+			$(el).find('.js-negotiate-under-consideration-pitch').on('click', function () {
+				scope.updatePitch(attrs.id, 'in_negotiation', 'under_consideration');
 			});
 
-			$(el).find('.js-accept-rejected-pitch').on('click', function () {
-				scope.updatePitch(attrs.id, 'pending', 'rejected');
+			$(el).find('.js-reject-under-consideration-pitch').on('click', function () {
+				scope.updatePitch(attrs.id, 'rejected', 'under_consideration');
+			});
+
+			$(el).find('.js-negotiate-under-consideration-pitch').on('click', function () {
+				scope.updatePitch(attrs.id, 'in_negotiation', 'under_consideration');
+			});
+
+			$(el).find('.js-consider-rejected-pitch').on('click', function () {
+				scope.updatePitch(attrs.id, 'under_consideration', 'rejected');
 			});
 		},
 		restrict: "A"
