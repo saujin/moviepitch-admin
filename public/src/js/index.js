@@ -81,19 +81,26 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
 
     }
   ])
-  .run(function($rootScope, $state){
+  .run(function($rootScope, $state, $http){
     $rootScope.curUser = null;
 
     $rootScope.$on('$stateChangeStart', function(event, toState){
       let requireLogin = toState.data.requireLogin;
 
-      if(requireLogin === true && $rootScope.curUser === null){
-        event.preventDefault();
-        $rootScope.targetState = toState.name;
-        $state.go('index');
+      if(requireLogin === true){
+        $http({
+          method: "GET",
+          url: "https://moviepitchapi.herokuapp.com/admin/check_auth"
+        }).then(function(resp){
+          // console.log(resp);
+        }).catch(function(err){
+          console.log(err);
+          $rootScope.targetState = toState.name;
+          $state.go('index');
+        });
       }
 
-      if(toState.name === "index" && $rootScope.curUser !== null){
+      else if (toState.name === "index" && $rootScope.curUser !== null){
         event.preventDefault();
         $rootScope.targetState = "admin";
         $state.go('admin');

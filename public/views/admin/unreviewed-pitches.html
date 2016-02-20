@@ -14,6 +14,9 @@
         <div class="pitch-list-item" admin-pitch ng-repeat="pitch in pitches" data-id="{{pitch._id}}" data-current-status="unreviewed">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>
+          <p class="pitch-contact" style="font-size: .875rem;">
+            <a href="mailto:{{pitch.submitterEmail}}" target="_blank">{{pitch.submitterEmail}}</a><br><a href="tel:{{pitch.submitterPhone}}">{{pitch.submitterPhone}}</a>
+          </p>
           <div class="btn-container pitch-actions">
             <button class="btn btn--tertiary" data-to-status="rejected">Reject</button>
             <button class="btn btn--secondary" data-to-status="under_consideration">Move Under Consideration</button>

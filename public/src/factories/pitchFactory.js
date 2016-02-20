@@ -20,7 +20,6 @@ moviePitchApp.factory('pitchFactory', function($q, $http, $rootScope) {
     },
 
     getPitchesByFilter: function(filterString){
-
       return $http({
         method: "GET",
         url: urlBase + "/pitch?" + filterString
@@ -96,10 +95,8 @@ moviePitchApp.factory('pitchFactory', function($q, $http, $rootScope) {
     },
 
     validatePitch: function(pitch){
-      // console.log(pitch);
-      var deferred = $q.defer();
+      let deferred = $q.defer();
 
-      console.log(pitch);
       if(
         pitch.userHasAcceptedTerms === true &&
         pitch.pitchText !== "" &&

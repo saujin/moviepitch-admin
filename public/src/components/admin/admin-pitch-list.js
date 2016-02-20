@@ -7,7 +7,6 @@ moviePitchApp.directive('adminPitchList', function(){
 				pitchFactory
 					.getPitchesByFilter('status=' + status)
 					.then(function(resp){
-						console.log(resp);
 						$scope.pitches = resp.data.docs;
 					})
 					.catch(function(err){
@@ -19,7 +18,6 @@ moviePitchApp.directive('adminPitchList', function(){
 			$scope.rejectPitch = function(id, status){
 				pitchFactory.rejectPitch(id)
 					.then(function(resp){
-						// console.log(resp);
 						$scope.getPitches(status);
 					})
 					.catch(function(err){

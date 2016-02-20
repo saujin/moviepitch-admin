@@ -50,19 +50,34 @@
 .admin-user + .admin-user {
 	border-top: solid 1px $pale-grey;
 }
+
 .pitch-list-item {
 	border-top: solid 1px $pale-grey;
 	padding: 1.5rem 0;
+	transition: all 0.35s;
 
 	&:first-of-type{
 		margin-top: 2rem;
 	}
 
-	.pitch-genre {
-		text-transform: uppercase;
-	}
-
 	p {
 		font-size: 1rem;
+	}
+}
+
+.pitch-list-item.animate-out {
+	opacity: 0;
+}
+
+.pitch-genre {
+	text-transform: uppercase;
+}
+
+.pitch-contact a {
+	color: $tomato;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
 	}
 }
