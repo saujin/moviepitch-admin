@@ -4,6 +4,7 @@ moviePitchApp.directive('adminPitch', function(){
 			const curState = el.attr('data-current-status');
 
 			el.find('button').on('click', function(){
+				el.addClass('animate-out');
 				const newState = this.getAttribute('data-to-status');
 				scope.updatePitch(attrs.id, newState, curState);
 			});

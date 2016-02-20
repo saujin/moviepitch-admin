@@ -16,8 +16,8 @@ moviePitchApp.controller('AdminController',
 	}
 
 	// Login an Admin
-	$scope.adminEmail = "j@j.com";
-	$scope.adminPassword = "test";
+	$scope.adminEmail = "";
+	$scope.adminPassword = "";
 
 	$scope.loginAdmin = function(){
 

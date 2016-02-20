@@ -65,19 +65,24 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
       requireLogin: true
     }
   });
-}]).run(function ($rootScope, $state) {
+}]).run(function ($rootScope, $state, $http) {
   $rootScope.curUser = null;
 
   $rootScope.$on('$stateChangeStart', function (event, toState) {
     var requireLogin = toState.data.requireLogin;
 
-    if (requireLogin === true && $rootScope.curUser === null) {
-      event.preventDefault();
-      $rootScope.targetState = toState.name;
-      $state.go('index');
-    }
-
-    if (toState.name === "index" && $rootScope.curUser !== null) {
+    if (requireLogin === true) {
+      $http({
+        method: "GET",
+        url: "https://moviepitchapi.herokuapp.com/admin/check_auth"
+      }).then(function (resp) {
+        // console.log(resp);
+      }).catch(function (err) {
+        console.log(err);
+        $rootScope.targetState = toState.name;
+        $state.go('index');
+      });
+    } else if (toState.name === "index" && $rootScope.curUser !== null) {
       event.preventDefault();
       $rootScope.targetState = "admin";
       $state.go('admin');
@@ -101,8 +106,8 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 	}
 
 	// Login an Admin
-	$scope.adminEmail = "j@j.com";
-	$scope.adminPassword = "test";
+	$scope.adminEmail = "";
+	$scope.adminPassword = "";
 
 	$scope.loginAdmin = function () {
 
@@ -358,7 +363,6 @@ moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
     },
 
     getPitchesByFilter: function getPitchesByFilter(filterString) {
-
       return $http({
         method: "GET",
         url: urlBase + "/pitch?" + filterString
@@ -428,10 +432,8 @@ moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
     },
 
     validatePitch: function validatePitch(pitch) {
-      // console.log(pitch);
       var deferred = $q.defer();
 
-      console.log(pitch);
       if (pitch.userHasAcceptedTerms === true && pitch.pitchText !== "" && pitch.genre !== "Select Genre" && pitch.genre !== "") {
         pitch.status = "created";
         pitch.userHasAcceptedTime = new Date();
@@ -471,101 +473,6 @@ moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
           msg: "Something has gone wrong. Please refresh the page."
         });
       }
-
-      return deferred.promise;
-    }
-  };
-
-  return factory;
-});
-"use strict";
-
-moviePitchApp.factory('userFactory', function ($q, $rootScope, $location) {
-  var factory = {
-    checkLoggedIn: function checkLoggedIn() {
-      var deferred = $q.defer();
-
-      if ($rootScope.curUser === null) {
-        console.log('1');
-        deferred.reject();
-        $location.url('/login');
-      } else {
-        console.log('2');
-        deferred.resolve();
-      }
-
-      return deferred.promise;
-    },
-    loginUser: function loginUser(username, pwd) {
-      var deferred = $q.defer();
-
-      Parse.User.logIn(username, pwd).then(function (user) {
-        $rootScope.curUser = user;
-
-        deferred.resolve({
-          status: "success",
-          data: user
-        });
-        $rootScope.$broadcast('login-update');
-      }, function (err) {
-        deferred.reject({
-          status: "error",
-          error: err
-        });
-      });
-
-      return deferred.promise;
-    },
-
-    logoutUser: function logoutUser() {
-      var deferred = $q.defer();
-      Parse.User.logOut();
-
-      var user = Parse.User.current();
-
-      if (user === null) {
-        // Remove the user from the $rootScope
-        $rootScope.curUser = null;
-        $rootScope.$broadcast('logout-update');
-        deferred.resolve({
-          status: "success",
-          msg: "User is logged out"
-        });
-      } else {
-        deferred.reject({
-          status: "error",
-          msg: "User is still logged in"
-        });
-      }
-
-      return deferred.promise;
-    },
-
-    signUp: function signUp(username, email, pwd) {
-      var deferred = $q.defer();
-
-      var user = new Parse.User();
-      user.set("username", username);
-      user.set("email", email);
-      user.set("password", pwd);
-
-      user.signUp(null, {
-        success: function success(user) {
-          deferred.resolve({
-            status: "success",
-            data: user
-          });
-          console.log(Parse.User.current());
-        },
-        error: function error(user, err) {
-          console.log(err);
-          deferred.reject({
-            status: "error",
-            user: user,
-            error: err
-          });
-        }
-      });
 
       return deferred.promise;
     }
@@ -649,7 +556,6 @@ moviePitchApp.directive('adminPitchList', function () {
 			// Load all the unreviewed pitches
 			$scope.getPitches = function (status) {
 				pitchFactory.getPitchesByFilter('status=' + status).then(function (resp) {
-					console.log(resp);
 					$scope.pitches = resp.data.docs;
 				}).catch(function (err) {
 					console.log(err);
@@ -659,7 +565,6 @@ moviePitchApp.directive('adminPitchList', function () {
 			// Reject a pitch by ID
 			$scope.rejectPitch = function (id, status) {
 				pitchFactory.rejectPitch(id).then(function (resp) {
-					// console.log(resp);
 					$scope.getPitches(status);
 				}).catch(function (err) {
 					console.log(err);
@@ -689,6 +594,7 @@ moviePitchApp.directive('adminPitch', function () {
 			var curState = el.attr('data-current-status');
 
 			el.find('button').on('click', function () {
+				el.addClass('animate-out');
 				var newState = this.getAttribute('data-to-status');
 				scope.updatePitch(attrs.id, newState, curState);
 			});
