@@ -6,7 +6,13 @@ moviePitchApp.directive('adminPitch', function(){
 			el.find('button').on('click', function(){
 				el.addClass('animate-out');
 				const newState = this.getAttribute('data-to-status');
-				scope.updatePitch(attrs.id, newState, curState);
+
+				if(newState === "rejected"){
+					scope.rejectPitch(attrs.id, newState)
+				} else {
+					scope.updatePitch(attrs.id, newState, curState);
+				}
+
 			});
 		},
 		restrict: "A"

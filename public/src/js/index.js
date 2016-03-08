@@ -81,8 +81,16 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
 
     }
   ])
-  .run(function($rootScope, $state, $http){
+  .run(function($rootScope, $state, $http, configFactory){
     $rootScope.curUser = null;
+
+    configFactory.getAPIUrl()
+      .then(function(resp){
+        console.log(resp)
+        $rootScope.apiUrl = resp.data;
+      }).catch(function(e){
+        console.log(e);
+      });
 
     $rootScope.$on('$stateChangeStart', function(event, toState){
       let requireLogin = toState.data.requireLogin;

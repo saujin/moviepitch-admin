@@ -1,8 +1,8 @@
 "use strict";
 
 moviePitchApp.factory('pitchFactory', function($q, $http, $rootScope) {
-  const urlBase = "https://moviepitchapi.herokuapp.com";
-
+  const urlBase = $rootScope.apiUrl || "https://moviepitchapi.herokuapp.com";
+  console.log(urlBase);
   const factory = {
 
     acceptPitch: function(id){
