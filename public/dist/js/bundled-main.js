@@ -34260,8 +34260,8 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
   $rootScope.curUser = null;
 
   configFactory.getAPIUrl().then(function (resp) {
-    console.log(resp);
     $rootScope.apiUrl = resp.data;
+    console.log('ConfigFactory has set $rootScope API URL to ' + $rootScope.apiUrl);
   }).catch(function (e) {
     console.log(e);
   });
@@ -34272,7 +34272,7 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
     if (requireLogin === true) {
       $http({
         method: "GET",
-        url: "https://moviepitchapi.herokuapp.com/admin/check_auth"
+        url: $rootScope.apiUrl + "/admin/check_auth"
       }).then(function (resp) {
         // console.log(resp);
       }).catch(function (err) {
@@ -34392,7 +34392,7 @@ moviePitchApp.controller('MainController', ['$scope', '$timeout', '$state', func
 "use strict";
 
 moviePitchApp.factory('adminFactory', function ($http, $q, $rootScope) {
-  var urlBase = "https://moviepitchapi.herokuapp.com";
+  var urlBase = $rootScope.apiUrl;
 
   var testUser = {
     name: "Justin Tulk",
@@ -34433,6 +34433,7 @@ moviePitchApp.factory('adminFactory', function ($http, $q, $rootScope) {
     },
 
     loginAdmin: function loginAdmin(email, pwd) {
+
       return $http({
         method: "POST",
         url: urlBase + "/admin/login",
@@ -34517,8 +34518,8 @@ moviePitchApp.factory('configFactory', function ($http) {
 });
 "use strict";
 
-moviePitchApp.factory('emailFactory', function ($q, $http) {
-  var urlBase = "https://moviepitchapi.herokuapp.com";
+moviePitchApp.factory('emailFactory', function ($q, $http, $rootScope) {
+  var urlBase = $rootScope.apiUrl;
 
   var factory = {
 
@@ -34556,8 +34557,10 @@ moviePitchApp.factory('emailFactory', function ($q, $http) {
 "use strict";
 
 moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
+  console.log('Pitch factory url is ' + $rootScope.apiUrl);
   var urlBase = $rootScope.apiUrl || "https://moviepitchapi.herokuapp.com";
-  console.log(urlBase);
+  console.log('URL Base is ' + urlBase);
+
   var factory = {
 
     acceptPitch: function acceptPitch(id) {
@@ -34819,6 +34822,22 @@ moviePitchApp.directive('adminPitch', function () {
 		restrict: "A"
 	};
 });
+"use strict";
+
+moviePitchApp.directive('appHeader', function ($state) {
+  return {
+    controller: function controller($scope) {
+      $scope.menuToggleStatus = "menu-closed";
+      $scope.currentLogAction = "show-login";
+
+      $scope.toggleMenu = function () {
+        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
+      };
+    },
+    restrict: "A",
+    templateUrl: "dist/components/nav/nav.html"
+  };
+});
 'use strict';
 
 moviePitchApp.directive('labelWrapper', function () {
@@ -34843,22 +34862,6 @@ moviePitchApp.directive('labelWrapper', function () {
       });
     },
     restrict: "A"
-  };
-});
-"use strict";
-
-moviePitchApp.directive('appHeader', function ($state) {
-  return {
-    controller: function controller($scope) {
-      $scope.menuToggleStatus = "menu-closed";
-      $scope.currentLogAction = "show-login";
-
-      $scope.toggleMenu = function () {
-        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
-      };
-    },
-    restrict: "A",
-    templateUrl: "dist/components/nav/nav.html"
   };
 });
 },{"angular":3,"angular-ui-router":1}]},{},[4]);

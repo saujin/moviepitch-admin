@@ -1,7 +1,7 @@
 "use strict";
 
 moviePitchApp.factory('adminFactory', function($http, $q, $rootScope){
-  const urlBase = "https://moviepitchapi.herokuapp.com";
+  const urlBase = $rootScope.apiUrl;
 
   const testUser = {
     name: "Justin Tulk",
@@ -42,6 +42,7 @@ moviePitchApp.factory('adminFactory', function($http, $q, $rootScope){
     },
 
     loginAdmin: function(email, pwd){
+
       return $http({
         method: "POST",
         url: urlBase + "/admin/login",

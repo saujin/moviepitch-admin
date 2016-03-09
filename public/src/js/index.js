@@ -86,8 +86,8 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
 
     configFactory.getAPIUrl()
       .then(function(resp){
-        console.log(resp)
         $rootScope.apiUrl = resp.data;
+        console.log('ConfigFactory has set $rootScope API URL to ' + $rootScope.apiUrl);
       }).catch(function(e){
         console.log(e);
       });
@@ -98,7 +98,7 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
       if(requireLogin === true){
         $http({
           method: "GET",
-          url: "https://moviepitchapi.herokuapp.com/admin/check_auth"
+          url: $rootScope.apiUrl + "/admin/check_auth"
         }).then(function(resp){
           // console.log(resp);
         }).catch(function(err){
