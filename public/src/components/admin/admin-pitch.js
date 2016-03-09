@@ -7,9 +7,14 @@ moviePitchApp.directive('adminPitch', function(){
 				el.addClass('animate-out');
 				const newState = this.getAttribute('data-to-status');
 
+
 				if(newState === "rejected"){
-					scope.rejectPitch(attrs.id, newState)
-				} else {
+					scope.rejectPitch(attrs.id, curState)
+				}
+				else if (newState === "accepted"){
+					scope.acceptPitch(attrs.id, curState)
+				}
+				else {
 					scope.updatePitch(attrs.id, newState, curState);
 				}
 

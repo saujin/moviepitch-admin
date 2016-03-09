@@ -586,18 +586,27 @@ moviePitchApp.directive('adminPitchList', function () {
 				});
 			};
 
-			// Reject a pitch by ID
-			$scope.rejectPitch = function (id, status) {
-				pitchFactory.rejectPitch(id).then(function (resp) {
-					$scope.getPitches(status);
+			// Accept a pitch by ID
+			$scope.acceptPitch = function (id, oldStatus) {
+				pitchFactory.acceptPitch(id).then(function (resp) {
+					$scope.getPitches(oldStatus);
 				}).catch(function (err) {
 					console.log(err);
 				});
 			};
 
-			$scope.updatePitch = function (id, data, status) {
+			// Reject a pitch by ID
+			$scope.rejectPitch = function (id, oldStatus) {
+				pitchFactory.rejectPitch(id).then(function (resp) {
+					$scope.getPitches(oldStatus);
+				}).catch(function (err) {
+					console.log(err);
+				});
+			};
+
+			$scope.updatePitch = function (id, data, oldStatus) {
 				pitchFactory.updatePitchStatus(id, data).then(function (resp) {
-					$scope.getPitches(status);
+					$scope.getPitches(oldStatus);
 				}).catch(function (err) {
 					console.log(err);
 				});
@@ -622,7 +631,9 @@ moviePitchApp.directive('adminPitch', function () {
 				var newState = this.getAttribute('data-to-status');
 
 				if (newState === "rejected") {
-					scope.rejectPitch(attrs.id, newState);
+					scope.rejectPitch(attrs.id, curState);
+				} else if (newState === "accepted") {
+					scope.acceptPitch(attrs.id, curState);
 				} else {
 					scope.updatePitch(attrs.id, newState, curState);
 				}
