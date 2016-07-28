@@ -51,6 +51,23 @@
 	border-top: solid 1px $pale-grey;
 }
 
+.pitch-list-flexbox {
+	align-items: center;
+	display: flex;
+	justify-content: flex-end;
+
+	button {
+		display: block;
+		flex: 0 0 auto;
+	}
+
+	span {
+		display: block;
+		flex: 1 1 auto;
+		text-align: center;
+	}
+}
+
 .pitch-list-item {
 	border-top: solid 1px $pale-grey;
 	padding: 1.5rem 0;

@@ -70,9 +70,8 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
 
   configFactory.getAPIUrl().then(function (resp) {
     $rootScope.apiUrl = resp.data;
-    console.log('ConfigFactory has set $rootScope API URL to ' + $rootScope.apiUrl);
   }).catch(function (e) {
-    console.log(e);
+    console.error(e);
   });
 
   $rootScope.$on('$stateChangeStart', function (event, toState) {
@@ -85,7 +84,7 @@ var moviePitchApp = angular.module("moviePitchApp", controllerArray).config(["$s
       }).then(function (resp) {
         // console.log(resp);
       }).catch(function (err) {
-        console.log(err);
+        console.error(err);
         $rootScope.targetState = toState.name;
         $state.go('index');
       });
@@ -132,7 +131,7 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 
 			$rootScope.targetState = "";
 		}).catch(function (err) {
-			console.log(err);
+			console.error(err);
 		});
 	};
 
@@ -147,7 +146,7 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 		adminFactory.logoutAdmin().then(function (resp) {
 			console.log('Logging out');
 		}).catch(function (err) {
-			console.log(err);
+			console.error(err);
 		});
 	};
 
@@ -172,9 +171,8 @@ moviePitchApp.controller('AdminController', ['$scope', '$rootScope', 'adminFacto
 				$timeout(function () {
 					$scope.notification = "";
 				}, 3000);
-				console.log(resp);
 			}).catch(function (err) {
-				console.log(err.data.message);
+				console.error(err.data.message);
 				$scope.notification = err.data.message;
 			});
 		}
@@ -366,9 +364,7 @@ moviePitchApp.factory('emailFactory', function ($q, $http, $rootScope) {
 "use strict";
 
 moviePitchApp.factory('pitchFactory', function ($q, $http, $rootScope) {
-  console.log('Pitch factory url is ' + $rootScope.apiUrl);
   var urlBase = $rootScope.apiUrl || "https://moviepitchapi.herokuapp.com";
-  console.log('URL Base is ' + urlBase);
 
   var factory = {
 
@@ -513,7 +509,7 @@ moviePitchApp.directive('adminAccountList', function () {
 			adminFactory.getAllAccounts().then(function (resp) {
 				$scope.admins = resp.data;
 			}).catch(function (err) {
-				console.log(err);
+				console.error(err);
 			});
 		},
 		restrict: "A"
@@ -530,34 +526,29 @@ moviePitchApp.directive('adminContactEmail', function () {
 
 			$scope.refreshEmails = function () {
 				adminFactory.getAdminEmails().then(function (resp) {
-					console.log(resp);
 					$scope.emails = resp.data;
 				}).catch(function (err) {
-					console.log(err);
+					console.error(err);
 				});
 			};
 
 			$scope.addAdmin = function () {
-				console.log($scope.newAdminEmail);
 
 				adminFactory.addAdminEmail($scope.newAdminEmail).then(function (resp) {
-					console.log(resp);
 					$scope.newAdminEmail = "";
 					$scope.refreshEmails();
 				}).catch(function (err) {
-					console.log(err);
+					console.error(err);
 				});
 			};
 
 			$scope.removeAdmin = function (id) {
 				var emailAddress = $scope.emails[id].email_address;
-				console.log(emailAddress);
 
 				adminFactory.removeAdminEmail(emailAddress).then(function (resp) {
-					console.log(resp);
 					$scope.refreshEmails();
 				}).catch(function (err) {
-					console.log(err);
+					console.error(err);
 				});
 			};
 
@@ -576,14 +567,40 @@ moviePitchApp.directive('adminContactEmail', function () {
 moviePitchApp.directive('adminPitchList', function () {
 	return {
 		controller: function controller($scope, pitchFactory) {
+			$scope.page = 1; // what page the component starts on
+			$scope.pages = 1; // how many pages are total
+
+			function _getPitches(status, num) {
+				pitchFactory.getPitchesByFilter('status=' + status + '&page=' + num).then(function (resp) {
+					$scope.pitches = resp.data.docs;
+					$scope.pages = resp.data.pages;
+				}).catch(function (err) {
+					console.error(err);
+				});
+			}
+
+			$scope.prev = function (status) {
+				if ($scope.page > 1) {
+					$scope.page = $scope.page - 1;
+					_getPitches(status, $scope.page);
+				}
+			};
+
+			$scope.next = function (status) {
+				if ($scope.page < $scope.pages) {
+					$scope.page = $scope.page + 1;
+					_getPitches(status, $scope.page);
+				}
+			};
 
 			// Load all the unreviewed pitches
-			$scope.getPitches = function (status) {
-				pitchFactory.getPitchesByFilter('status=' + status).then(function (resp) {
-					$scope.pitches = resp.data.docs;
-				}).catch(function (err) {
-					console.log(err);
-				});
+			$scope.getPitches = function (status, pageNum) {
+				if (pageNum === undefined) {
+					pageNum = 1;
+				}
+
+				pitchFactory;
+				_getPitches(status, $scope.page);
 			};
 
 			// Accept a pitch by ID
@@ -591,7 +608,7 @@ moviePitchApp.directive('adminPitchList', function () {
 				pitchFactory.acceptPitch(id).then(function (resp) {
 					$scope.getPitches(oldStatus);
 				}).catch(function (err) {
-					console.log(err);
+					console.error(err);
 				});
 			};
 
@@ -600,7 +617,7 @@ moviePitchApp.directive('adminPitchList', function () {
 				pitchFactory.rejectPitch(id).then(function (resp) {
 					$scope.getPitches(oldStatus);
 				}).catch(function (err) {
-					console.log(err);
+					console.error(err);
 				});
 			};
 
@@ -608,13 +625,23 @@ moviePitchApp.directive('adminPitchList', function () {
 				pitchFactory.updatePitchStatus(id, data).then(function (resp) {
 					$scope.getPitches(oldStatus);
 				}).catch(function (err) {
-					console.log(err);
+					console.error(err);
 				});
 			};
 		},
 		link: function link(scope, el, attrs) {
 			// Load all the unreviewed pitches on init
-			scope.getPitches(attrs.status);
+			scope.getPitches(attrs.status, 1);
+
+			var prevBtn = document.getElementById('prev-button');
+			prevBtn.addEventListener('click', function () {
+				scope.prev('rejected');
+			});
+
+			var nextBtn = document.getElementById('next-button');
+			nextBtn.addEventListener('click', function () {
+				scope.next('rejected');
+			});
 		},
 		restrict: "A"
 	};
@@ -642,6 +669,22 @@ moviePitchApp.directive('adminPitch', function () {
 		restrict: "A"
 	};
 });
+"use strict";
+
+moviePitchApp.directive('appHeader', function ($state) {
+  return {
+    controller: function controller($scope) {
+      $scope.menuToggleStatus = "menu-closed";
+      $scope.currentLogAction = "show-login";
+
+      $scope.toggleMenu = function () {
+        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
+      };
+    },
+    restrict: "A",
+    templateUrl: "dist/components/nav/nav.html"
+  };
+});
 'use strict';
 
 moviePitchApp.directive('labelWrapper', function () {
@@ -666,21 +709,5 @@ moviePitchApp.directive('labelWrapper', function () {
       });
     },
     restrict: "A"
-  };
-});
-"use strict";
-
-moviePitchApp.directive('appHeader', function ($state) {
-  return {
-    controller: function controller($scope) {
-      $scope.menuToggleStatus = "menu-closed";
-      $scope.currentLogAction = "show-login";
-
-      $scope.toggleMenu = function () {
-        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
-      };
-    },
-    restrict: "A",
-    templateUrl: "dist/components/nav/nav.html"
   };
 });

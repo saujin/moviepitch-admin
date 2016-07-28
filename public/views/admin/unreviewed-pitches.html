@@ -10,7 +10,11 @@
         <h3 class="card-heading">Unreviewed Pitches</h3>
         <p>Here are all the currently unriewed pitches that have been submitted. Move a pitch to the "under consideration" list if it might possibly be pitched. Immediately reject pitches that will not be pitched.</p>
 
-        <div class="pitch-list-item">There are currently {{pitches.length}} unreviewed pitches.</div>
+        <div class="pitch-list-item pitch-list-flexbox">
+          <button class="pagination-button btn btn--tertiary" id="prev-button">Prev</button>
+          <span>Showing&nbsp;{{pitches.length}}&nbsp;results. (Page&nbsp;{{page}}&nbsp;of&nbsp;{{pages}})</span>
+          <button class="pagination-button btn btn--tertiary" id="next-button">Next</button>
+        </div>
         <div class="pitch-list-item" admin-pitch ng-repeat="pitch in pitches" data-id="{{pitch._id}}" data-current-status="unreviewed">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>

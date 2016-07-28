@@ -10,7 +10,11 @@
         <h3 class="card-heading">Under Consideration Pitches</h3>
         <p>These pitches are have made it past the first round of review and are waiting to be pitched to studios. Successfully pitched ideas should be moved to the "negotiation" phase.</p>
 
-        <div class="pitch-list-item">There are currently {{pitches.length}} pitches under consideration.</div>
+        <div class="pitch-list-item pitch-list-flexbox">
+          <button class="pagination-button btn btn--tertiary" id="prev-button">Prev</button>
+          <span>Showing&nbsp;{{pitches.length}}&nbsp;results. (Page&nbsp;{{page}}&nbsp;of&nbsp;{{pages}})</span>
+          <button class="pagination-button btn btn--tertiary" id="next-button">Next</button>
+        </div>
         <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}" data-current-status="under_consideration">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>

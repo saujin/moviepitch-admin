@@ -7,7 +7,7 @@ moviePitchApp.directive('adminAccountList', function(){
 					$scope.admins = resp.data
 				})
 				.catch(err => {
-					console.log(err)
+					console.error(err)
 				});
 		},
 		restrict: "A"

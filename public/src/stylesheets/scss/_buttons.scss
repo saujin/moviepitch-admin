@@ -92,6 +92,10 @@
   }
 }
 
+.paginate-button {
+  display: inline-block;
+}
+
 @media all and (max-width: $tabletMax){
   .btn-container {
     justify-content: center;

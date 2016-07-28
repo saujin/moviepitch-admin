@@ -38,7 +38,7 @@ moviePitchApp.controller('AdminController',
 				$rootScope.targetState = "";
 			})
 			.catch(function(err){
-				console.log(err);
+				console.error(err);
 			});
 	};
 
@@ -55,7 +55,7 @@ moviePitchApp.controller('AdminController',
 				console.log('Logging out');
 			})
 			.catch(function(err){
-				console.log(err);
+				console.error(err);
 			});
 	};
 
@@ -88,10 +88,9 @@ moviePitchApp.controller('AdminController',
 				$timeout(function(){
 					$scope.notification = "";
 				}, 3000);
-				console.log(resp);
 			})
 			.catch(function(err){
-				console.log(err.data.message);
+				console.error(err.data.message);
 				$scope.notification = err.data.message;
 			});
 		}

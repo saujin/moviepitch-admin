@@ -8,39 +8,34 @@ moviePitchApp.directive('adminContactEmail', function(){
 			$scope.refreshEmails = function(){
 				adminFactory.getAdminEmails()
 					.then(function(resp){
-						console.log(resp);
 						$scope.emails = resp.data;
 					})
 					.catch(function(err){
-						console.log(err);
+						console.error(err);
 					});
 			};
 
 			$scope.addAdmin = function(){
-				console.log($scope.newAdminEmail);
 
 				adminFactory.addAdminEmail($scope.newAdminEmail)
 					.then(function(resp){
-						console.log(resp);
 						$scope.newAdminEmail = "";
 						$scope.refreshEmails();
 					})
 					.catch(function(err){
-						console.log(err)
+						console.error(err)
 					});
 			};
 
 			$scope.removeAdmin = function(id){
 				let emailAddress = $scope.emails[id].email_address;
-				console.log(emailAddress);
 
 				adminFactory.removeAdminEmail(emailAddress)
 					.then(function(resp){
-						console.log(resp);
 						$scope.refreshEmails();
 					})
 					.catch(function(err){
-						console.log(err);
+						console.error(err);
 					});
 			}
 

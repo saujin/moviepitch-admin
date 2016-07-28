@@ -10,7 +10,11 @@
         <h3 class="card-heading">In Negotiation Pitches</h3>
         <p>In negotiation pitches are currently being negotiated.</p>
 
-        <div class="pitch-list-item">There are currently {{pitches.length}} pitches in negotiation.</div>
+        <div class="pitch-list-item pitch-list-flexbox">
+          <button class="pagination-button btn btn--tertiary" id="prev-button">Prev</button>
+          <span>Showing&nbsp;{{pitches.length}}&nbsp;results. (Page&nbsp;{{page}}&nbsp;of&nbsp;{{pages}})</span>
+          <button class="pagination-button btn btn--tertiary" id="next-button">Next</button>
+        </div>
         <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}" data-current-status="in_negotiation">
           <div class="pitch-genre">{{pitch.genre}}</div>
           <p>{{pitch.pitchText}}</p>

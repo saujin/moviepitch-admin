@@ -87,9 +87,8 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
     configFactory.getAPIUrl()
       .then(function(resp){
         $rootScope.apiUrl = resp.data;
-        console.log('ConfigFactory has set $rootScope API URL to ' + $rootScope.apiUrl);
       }).catch(function(e){
-        console.log(e);
+        console.error(e);
       });
 
     $rootScope.$on('$stateChangeStart', function(event, toState){
@@ -102,7 +101,7 @@ let moviePitchApp = angular.module("moviePitchApp", controllerArray)
         }).then(function(resp){
           // console.log(resp);
         }).catch(function(err){
-          console.log(err);
+          console.error(err);
           $rootScope.targetState = toState.name;
           $state.go('index');
         });
