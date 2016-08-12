@@ -7,6 +7,7 @@ moviePitchApp.directive('adminPitchList', function(){
 			function _getPitches(status, num) {
 				pitchFactory.getPitchesByFilter('status=' + status + '&page=' + num)
 					.then(function(resp){
+						console.log(resp)
 						$scope.pitches = resp.data.docs;
 						$scope.pages = resp.data.pages;
 					})
@@ -33,8 +34,7 @@ moviePitchApp.directive('adminPitchList', function(){
 			$scope.getPitches = function(status, pageNum){
 				if(pageNum === undefined) { pageNum = 1 }
 
-				pitchFactory
-					_getPitches(status, $scope.page)
+				_getPitches(status, $scope.page)
 			}
 
 			// Accept a pitch by ID
@@ -69,6 +69,11 @@ moviePitchApp.directive('adminPitchList', function(){
 					})
 			}
 
+			$scope.returnDate = function(date) {
+				var theDate = new Date(date * 1000)
+				return theDate.toLocaleString()
+			}
+
 		},
 		link: function(scope, el, attrs){
 			// Load all the unreviewed pitches on init
@@ -76,12 +81,12 @@ moviePitchApp.directive('adminPitchList', function(){
 
 			var prevBtn = document.getElementById('prev-button')
 			prevBtn.addEventListener('click', function(){
-				scope.prev('rejected')
+				scope.prev(attrs.status)
 			})
 
 			var nextBtn = document.getElementById('next-button')
 			nextBtn.addEventListener('click', function(){
-				scope.next('rejected')
+				scope.next(attrs.status)
 			})
 		},
 		restrict: "A"

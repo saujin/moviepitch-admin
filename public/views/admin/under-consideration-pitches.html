@@ -16,7 +16,7 @@
           <button class="pagination-button btn btn--tertiary" id="next-button">Next</button>
         </div>
         <div admin-pitch ng-repeat="pitch in pitches" class="pitch-list-item" data-id="{{pitch._id}}" data-current-status="under_consideration">
-          <div class="pitch-genre">{{pitch.genre}}</div>
+          <div class="pitch-genre">{{pitch.genre}} <span class="pitch-list-date">{{returnDate(pitch.paymentToken.created)}}</div>
           <p>{{pitch.pitchText}}</p>
           <p class="pitch-contact" style="font-size: .875rem;">
             <a href="mailto:{{pitch.submitterEmail}}" target="_blank">{{pitch.submitterEmail}}</a><br><a href="tel:{{pitch.submitterPhone}}">{{pitch.submitterPhone}}</a>

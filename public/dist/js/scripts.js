@@ -572,6 +572,7 @@ moviePitchApp.directive('adminPitchList', function () {
 
 			function _getPitches(status, num) {
 				pitchFactory.getPitchesByFilter('status=' + status + '&page=' + num).then(function (resp) {
+					console.log(resp);
 					$scope.pitches = resp.data.docs;
 					$scope.pages = resp.data.pages;
 				}).catch(function (err) {
@@ -599,7 +600,6 @@ moviePitchApp.directive('adminPitchList', function () {
 					pageNum = 1;
 				}
 
-				pitchFactory;
 				_getPitches(status, $scope.page);
 			};
 
@@ -628,6 +628,11 @@ moviePitchApp.directive('adminPitchList', function () {
 					console.error(err);
 				});
 			};
+
+			$scope.returnDate = function (date) {
+				var theDate = new Date(date * 1000);
+				return theDate.toLocaleString();
+			};
 		},
 		link: function link(scope, el, attrs) {
 			// Load all the unreviewed pitches on init
@@ -635,12 +640,12 @@ moviePitchApp.directive('adminPitchList', function () {
 
 			var prevBtn = document.getElementById('prev-button');
 			prevBtn.addEventListener('click', function () {
-				scope.prev('rejected');
+				scope.prev(attrs.status);
 			});
 
 			var nextBtn = document.getElementById('next-button');
 			nextBtn.addEventListener('click', function () {
-				scope.next('rejected');
+				scope.next(attrs.status);
 			});
 		},
 		restrict: "A"
@@ -669,22 +674,6 @@ moviePitchApp.directive('adminPitch', function () {
 		restrict: "A"
 	};
 });
-"use strict";
-
-moviePitchApp.directive('appHeader', function ($state) {
-  return {
-    controller: function controller($scope) {
-      $scope.menuToggleStatus = "menu-closed";
-      $scope.currentLogAction = "show-login";
-
-      $scope.toggleMenu = function () {
-        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
-      };
-    },
-    restrict: "A",
-    templateUrl: "dist/components/nav/nav.html"
-  };
-});
 'use strict';
 
 moviePitchApp.directive('labelWrapper', function () {
@@ -709,5 +698,21 @@ moviePitchApp.directive('labelWrapper', function () {
       });
     },
     restrict: "A"
+  };
+});
+"use strict";
+
+moviePitchApp.directive('appHeader', function ($state) {
+  return {
+    controller: function controller($scope) {
+      $scope.menuToggleStatus = "menu-closed";
+      $scope.currentLogAction = "show-login";
+
+      $scope.toggleMenu = function () {
+        $scope.menuToggleStatus = $scope.menuToggleStatus === "menu-closed" ? "menu-open" : "menu-closed";
+      };
+    },
+    restrict: "A",
+    templateUrl: "dist/components/nav/nav.html"
   };
 });
